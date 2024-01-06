@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import loading from '../utils/images/loading.gif';
-import sort from '../utils/images/sort.png';
+import sort_up from '../utils/images/sort-up.png';
+import sort_down from '../utils/images/sort-down.png';
 import api from '../utils/Api';
 import AddNewIncident from './AddNewIncident';
 import { sortByDate } from '../utils/SortingAlgorithms';
@@ -9,17 +10,50 @@ const Profile = ({ incidentsList }) => {
   const [selectedIncident, setSelectedIncident] = useState(null);
   const [isSelectedIncidentLoading, setSelectedIncidentLoading] = useState(true);
   const [isPopupOpened, setPopupOpened] = useState(false);
-
+  const [sortedIncidentsList, setIncidentsList] = useState([]);
   // sort logics
-  const [sortedField, setSortedField] = useState('date');
-  
+  const [sortParams, setSortParams] = useState({
+    field: 'date',
+    increment: false,
+  });
+
+  const { field, increment } = sortParams;
+
   useEffect(() => {
-    if (sortedField === 'date') {
-      incidentsList.sort(sortByDate);
+    if (field === 'date') {
+      const sortedIncidents = [...incidentsList];
+      sortedIncidents.sort((a, b) => {
+        return (increment ? (a.date - b.date ? -1 : 1) : (b.date - a.date ? 1 : -1));
+      });
+      setIncidentsList(sortedIncidents);
     }
-  }, [sortedField, incidentsList])
+    if (field === 'status') {
+      const sortedIncidents = [...incidentsList];
+      sortedIncidents.sort((a, b) => {
+        const statusA = a.state.toLowerCase();
+        const statusB = b.state.toLowerCase();
+        return increment ? statusB.localeCompare(statusA) : statusA.localeCompare(statusB);
+      });
+      setIncidentsList(sortedIncidents);
+    }
+  }, [field, increment, incidentsList]);
 
 
+
+
+  const setSortedFieldDate = () => {
+    setSortParams((prevParams) => ({
+      field: 'date',
+      increment: !prevParams.increment,
+    }));
+  };
+
+  const setSortedFieldStatus = () => {
+    setSortParams((prevParams) => ({
+      field: 'status',
+      increment: !prevParams.increment,
+    }));
+  };
 
 
   useEffect(() => {
@@ -47,19 +81,37 @@ const Profile = ({ incidentsList }) => {
         <div className='profile-div'>
           <div className='incident-list__table'>
             <div className='incident-list__header'>
-              <div className={`incident-list__cell first-column`} onClick={() => setSortedField('date')}>Дата{sortedField === 'date' ? <img className='incident-list__sort' src={sort} alt=''></img> : null}</div>
+              <div className='incident-list__cell first-column' onClick={() => setSortedFieldDate()}>
+                Дата
+                {sortParams.field === 'date' && (
+                  sortParams.increment ? (
+                    <img className='incident-list__sort' src={sort_up} alt='' />
+                  ) : (
+                    <img className='incident-list__sort' src={sort_down} alt='' />
+                  )
+                )}
+              </div>
               <div className={`incident-list__cell second-column`}>Тема</div>
-              <div className={`incident-list__cell third-column`} onClick={() => setSortedField('status')}>Статус{sortedField === 'status' ? <img className='incident-list__sort' src={sort} alt=''></img> : null}</div>
+              <div className={`incident-list__cell third-column`} onClick={() => setSortedFieldStatus()}>
+                Статус
+                {sortParams.field === 'status' && (
+                  sortParams.increment ? (
+                    <img className='incident-list__sort' src={sort_down} alt='' />
+                  ) : (
+                    <img className='incident-list__sort' src={sort_up} alt='' />
+                  )
+                )}
+              </div>
             </div>
             <div className='incident-list__body'>
-              {incidentsList.map((incident) => (
+              {sortedIncidentsList.map((incident) => (
                 <div
                   key={incident.linkUuid}
                   className='incident-list__row'
                   onClick={() => setSelectedIncidentUuid(incident.linkUuid)}
                 >
-                  <div className='incident-list__cell first-column'>{incident.date}</div>
-                  <div className='incident-list__cell second-column'>{incident.topic}</div>
+                  <div className='incident-list__cell first-column'>{incident.date.split(':').slice(0, -1).join(':')}</div>
+                  <div className='incident-list__cell second-column' maxlength='15'>{incident.topic}</div>
                   <div className='incident-list__cell third-column'>{incident.state}</div>
                 </div>
               ))}
@@ -103,7 +155,7 @@ const Profile = ({ incidentsList }) => {
             )}
           </div>
         </div>
-      </div>
+      </div >
       <AddNewIncident setPopupOpened={setPopupOpened} isPopupOpened={isPopupOpened} />
     </>
   );
