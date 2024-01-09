@@ -12,19 +12,20 @@ function Login({ onSignIn }) {
   return (
     <>
       <form className="form" onSubmit={(e) => submitForm(e)}>
-      <h1 className="form__title">Itilium IT</h1>
+        <p className="form_p">Логин</p>
         <input
           type="text"
-          placeholder="Логин"
+          placeholder="Введите логин"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-        required/>
+          required />
+        <p className="form_p">Пароль</p>
         <input
           type="password"
-          placeholder="Пароль"
+          placeholder="Введите пароль"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-        required/>
+          required />
         <button type="submit" style={{ alignSelf: 'center' }}>Войти</button>
       </form>
     </>

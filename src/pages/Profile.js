@@ -4,7 +4,6 @@ import sort_up from '../utils/images/sort-up.png';
 import sort_down from '../utils/images/sort-down.png';
 import api from '../utils/Api';
 import AddNewIncident from './AddNewIncident';
-import { sortByDate } from '../utils/SortingAlgorithms';
 const Profile = ({ incidentsList }) => {
   const [selectedIncidentUuid, setSelectedIncidentUuid] = useState(null);
   const [selectedIncident, setSelectedIncident] = useState(null);
@@ -77,7 +76,6 @@ const Profile = ({ incidentsList }) => {
   return (
     <>
       <div className='profile-page-block'>
-        <button className='button-add-new-incident' onClick={() => setPopupOpened(true)}>Создать обращение</button>
         <div className='profile-div'>
           <div className='incident-list__table'>
             <div className='incident-list__header'>
@@ -111,7 +109,7 @@ const Profile = ({ incidentsList }) => {
                   onClick={() => setSelectedIncidentUuid(incident.linkUuid)}
                 >
                   <div className='incident-list__cell first-column'>{incident.date.split(':').slice(0, -1).join(':')}</div>
-                  <div className='incident-list__cell second-column' maxlength='15'>{incident.topic}</div>
+                  <div className='incident-list__cell second-column'>{incident.topic}</div>
                   <div className='incident-list__cell third-column'>{incident.state}</div>
                 </div>
               ))}
@@ -140,17 +138,19 @@ const Profile = ({ incidentsList }) => {
                   <div className='incident-info__text-block'>
                     <p className='incident-info__topic'>
                       <span>Тема: </span>
-                      {selectedIncident.topic}
+                      <p>{selectedIncident.topic}</p>
                     </p>
-                    <p className='incident-info__description'>{selectedIncident.description}</p>
-                    <p className='incident-info__curator'>
-                      <span>Ответственный: </span>
-                      {selectedIncident.responsible}
-                    </p>
+                    <p className='incident-info__topic'><span>Описание:</span></p> 
+                      <p className='incident-info__description'> {selectedIncident.description}</p>
+                      <p className='incident-info__curator'>
+                        <span>Ответственный: </span>
+                        {selectedIncident.responsible}
+                      </p>
                   </div>
+                  <button className='button-add-new-incident' onClick={() => setPopupOpened(true)}>Создать новое обращение</button>
                 </>
               )
-            ) : (
+            ) : ( 
               <p className='incident-info__selectincident'>Выберите заявку из списка</p>
             )}
           </div>

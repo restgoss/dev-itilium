@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import cross from '../utils/images/cross.svg';
 import { Services } from "../utils/Constants";
 import api from "../utils/Api";
@@ -15,7 +15,6 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
 
     const [topic, setTopic] = useState('');
     const [description, setDescription] = useState('');
-
     const handleClosePopup = () => {
         setTopic('');
         setDescription('');
@@ -25,49 +24,10 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
 
     useEffect(() => {
         if (selectedServiceComponent) {
-            console.log(selectedServiceComponent.ServiceComponent);
             setTopic(selectedServiceComponent.ServiceComponent);
         }
     }, [selectedServiceComponent]);
 
-    useEffect(() => {
-        const scrollHorizontally = (e) => {
-            var scrollPos = e.currentTarget.scrollLeft;
-
-            e = window.event || e;
-            var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-            e.currentTarget.scrollLeft -= delta * 40;
-
-            var widthElem = e.currentTarget.scrollWidth;
-            var widthBrowser = document.documentElement.clientWidth;
-            if ((delta === 1) && (e.currentTarget.scrollLeft === 0)) return;
-            if ((widthBrowser >= widthElem) || (scrollPos === e.currentTarget.scrollLeft)) return;
-
-            e.preventDefault();
-        };
-
-        const addScrollListeners = () => {
-            var elems = document.querySelectorAll('.scrollMouse');
-            Array.from(elems).forEach((elem) => {
-                elem.addEventListener("mousewheel", scrollHorizontally, false);
-                elem.addEventListener("DOMMouseScroll", scrollHorizontally, false);
-            });
-        };
-
-        const removeScrollListeners = () => {
-            var elems = document.querySelectorAll('.scrollMouse');
-            Array.from(elems).forEach((elem) => {
-                elem.removeEventListener("mousewheel", scrollHorizontally, false);
-                elem.removeEventListener("DOMMouseScroll", scrollHorizontally, false);
-            });
-        };
-
-        addScrollListeners();
-
-        return () => {
-            removeScrollListeners();
-        };
-    }, []);
 
     useEffect(() => {
         const fetchSelectedService = async () => {
@@ -90,18 +50,6 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log({
-            "Topic": "Тест",
-            "Data": "12.12.2023 12:13:14",
-            "Description": "Тест",
-            "MembershipServices": {
-                "UID": `${selectedServiceComponent.ServiceComponentUuid}`,
-                "Service": {
-                    "UID": `${selectedServiceUuid}`
-                }
-            }
-        });
-
         try {
             const token = localStorage.getItem('jwt');
             const body = {
@@ -123,6 +71,16 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
         }
     };
 
+    const servicesContainerRef1 = useRef(null);
+    const servicesContainerRef2 = useRef(null);
+
+    const handleWheelScroll = (e, containerId) => {
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.scrollLeft += e.deltaY;
+        }
+    };
+
     return (
         <>
             <div className={isPopupOpened ? `incident-popup incident-popup_active` : `incident-popup`}>
@@ -130,17 +88,22 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
                 <div className="incident-popup__body">
                     {successMessage ? (
                         <>
-                            <img className="incident-popup__img" src={success}></img>
+                            <img className="incident-popup__img" src={success} alt=""></img>
                             <p className="incident-popup__success">Обращение успешно зарегистрировано!</p>
                             <button className="incident-popup__button" onClick={handleClosePopup}>В профиль</button>
                         </>
                     ) : (
                         <>
-                            <div className="incident-popup__services-div scrollMouse">
+                            <div id="servicesContainer1"
+                                ref={servicesContainerRef1}
+                                className="incident-popup__services-div"
+                                onWheel={(e) => handleWheelScroll(e, "servicesContainer1")}>
                                 {Services.map((item) => (
+
                                     <div className={selectedServiceUuid === item.ServiceUuid ? `incident-popup__services-item incident-popup__services-item_active` : `incident-popup__services-item`} key={item.ServiceUuid} onClick={() => setSelectedServiceUuid(item.ServiceUuid)}>
                                         <p>{item.Service}</p>
                                     </div>
+
                                 ))}
                             </div>
                             {selectedServiceLoading ? (
@@ -149,7 +112,11 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
                                 </div>
                             ) : (
                                 selectedServiceComponents.length > 0 ? (
-                                    <div className="incident-popup__services-div scrollMouse">
+
+                                    <div id="servicesContainer2"
+                                        ref={servicesContainerRef2}
+                                        className="incident-popup__services-div"
+                                        onWheel={(e) => handleWheelScroll(e, "servicesContainer2")}>
                                         {selectedServiceComponents.map((item) => (
                                             <div className={selectedServiceComponent && selectedServiceComponent.ServiceComponentUuid === item.ServiceComponentUuid ? `incident-popup__services-item incident-popup__services-item_active` : `incident-popup__services-item`} key={item.ServiceComponent} onClick={() => setSelectedServiceComponent(item)}>
                                                 <p>{item.ServiceComponent}</p>
