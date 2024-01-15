@@ -13,6 +13,9 @@ export class Api {
                 "Authorization": `Basic ${token}`,
             },
         });
+        if(response.status === 401) {
+            return null;
+        }
         return this._handleResponse(response);
     }
 

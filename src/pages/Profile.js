@@ -4,11 +4,10 @@ import sort_up from '../utils/images/sort-up.png';
 import sort_down from '../utils/images/sort-down.png';
 import api from '../utils/Api';
 import AddNewIncident from './AddNewIncident';
-const Profile = ({ incidentsList }) => {
+const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
   const [selectedIncidentUuid, setSelectedIncidentUuid] = useState(null);
   const [selectedIncident, setSelectedIncident] = useState(null);
   const [isSelectedIncidentLoading, setSelectedIncidentLoading] = useState(true);
-  const [isPopupOpened, setPopupOpened] = useState(false);
   const [sortedIncidentsList, setIncidentsList] = useState([]);
   // sort logics
   const [sortParams, setSortParams] = useState({
@@ -83,20 +82,21 @@ const Profile = ({ incidentsList }) => {
                 Дата
                 {sortParams.field === 'date' && (
                   sortParams.increment ? (
-                    <img className='incident-list__sort' src={sort_up} alt='' />
+                    ' ▲'
                   ) : (
-                    <img className='incident-list__sort' src={sort_down} alt='' />
+                    ' ▼'
                   )
                 )}
               </div>
-              <div className={`incident-list__cell second-column`}>Тема</div>
-              <div className={`incident-list__cell third-column`} onClick={() => setSortedFieldStatus()}>
+              <div className={`incident-list__cell second-column`}>Номер</div>
+              <div className={`incident-list__cell third-column`}>Тема</div>
+              <div className={`incident-list__cell fourth-column`} onClick={() => setSortedFieldStatus()}>
                 Статус
                 {sortParams.field === 'status' && (
                   sortParams.increment ? (
-                    <img className='incident-list__sort' src={sort_down} alt='' />
+                    ' ▼'
                   ) : (
-                    <img className='incident-list__sort' src={sort_up} alt='' />
+                    ' ▲'
                   )
                 )}
               </div>
@@ -109,8 +109,9 @@ const Profile = ({ incidentsList }) => {
                   onClick={() => setSelectedIncidentUuid(incident.linkUuid)}
                 >
                   <div className='incident-list__cell first-column'>{incident.date.split(':').slice(0, -1).join(':')}</div>
-                  <div className='incident-list__cell second-column'>{incident.topic}</div>
-                  <div className='incident-list__cell third-column'>{incident.state}</div>
+                  <div className='incident-list__cell second-column'>{incident.number}</div>
+                  <div className='incident-list__cell third-column'>{incident.topic}</div>
+                  <div className='incident-list__cell fourth-column'>{incident.state}</div>
                 </div>
               ))}
             </div>
@@ -121,36 +122,33 @@ const Profile = ({ incidentsList }) => {
                 <img src={loading} className='incident-info__loading' alt='Загрузка...'></img>
               ) : (
                 <>
-                  <div className='incident-info__header'>
-                    <div className='incident-info__first-cell'>
-                      <span>№ </span>
-                      {selectedIncident.number}
+                  <div className='incident-info__block'>
+                    <div className='incident-info__header'>
+                      <div className='incident-info__first-cell'>
+                        <span>№ </span>
+                        {selectedIncident.number}
+                      </div>
+                      <div className='incident-info__second-cell'>
+                        <span>Дата: </span>
+                        {selectedIncident.date}
+                      </div>
                     </div>
-                    <div className='incident-info__second-cell'>
-                      <span>Дата: </span>
-                      {selectedIncident.date}
-                    </div>
-                    <div className='incident-info__third-cell'>
-                      <span>Статус: </span>
-                      {selectedIncident.state}
-                    </div>
-                  </div>
-                  <div className='incident-info__text-block'>
-                    <p className='incident-info__topic'>
-                      <span>Тема: </span>
-                      <p>{selectedIncident.topic}</p>
-                    </p>
-                    <p className='incident-info__topic'><span>Описание:</span></p> 
+                    <div className='incident-info__text-block'>
+                      <p className='incident-info__topic'>
+                        <span>Тема: </span>
+                        <p>{selectedIncident.topic}</p>
+                      </p>
+                      <p className='incident-info__topic'><span>Описание:</span></p>
                       <p className='incident-info__description'> {selectedIncident.description}</p>
                       <p className='incident-info__curator'>
-                        <span>Ответственный: </span>
-                        {selectedIncident.responsible}
+                        <span>Статус: </span>
+                        {selectedIncident.state}
                       </p>
+                    </div>
                   </div>
-                  <button className='button-add-new-incident' onClick={() => setPopupOpened(true)}>Создать новое обращение</button>
                 </>
               )
-            ) : ( 
+            ) : (
               <p className='incident-info__selectincident'>Выберите заявку из списка</p>
             )}
           </div>

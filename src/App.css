@@ -314,17 +314,18 @@ header {
 }
 
 .button-add-new-incident {
+  font-family: inherit;
   position: absolute;
   top: 7px;
   right: 50%;
+  color: #000;
   border: 1px solid #d9d9d9;
   background-color: #fff;
-  color: #000;
+  transition: .3s ease-in-out;
   width: 150px;
   height: 60px;
   border-radius: 6px;
   font-size: 14px;
-  transition: .3 ease-in-out;
 }
 
 .button-add-new-incident:hover {
@@ -347,7 +348,7 @@ header {
 
 .incident-list__table {
   position: relative;
-  width: 30%;
+  width: 45%;
   border-right: 1px solid #d9d9d9;
 }
 
@@ -430,15 +431,27 @@ header {
 }
 
 .first-column {
-  width: 30%;
-  margin-left: 30px;
+  width: 25%;
+  margin-left: 25px;
 }
 
 .second-column {
-  width: 50%;
+  width: 20%;
+}
+
+.second-column:hover {
+  cursor: default;
 }
 
 .third-column {
+  width: 35%;
+}
+
+.third-column:hover {
+  cursor: default;
+}
+
+.fourth-column{
   width: 20%;
 }
 
@@ -458,10 +471,15 @@ header {
 }
 
 .incident-info__div {
-  width: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 55%;
 }
 
 .incident-info__header {
+  width: 100%;
   height: 60px;
   display: flex;
   flex-direction: row;
@@ -497,6 +515,13 @@ header {
 
 .incident-info__third-cell span {
   font-weight: bold;
+}
+
+.incident-info__block {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
 }
 
 .incident-info__text-block {
@@ -536,7 +561,6 @@ header {
 .incident-info__loading {
   width: 25px;
   height: 25px;
-  margin-top: 50%;
 }
 
 .incident-info__selectincident {

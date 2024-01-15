@@ -3,11 +3,12 @@ import { useState } from "react";
 function Login({ onSignIn }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
+  const [showPassword, setShowPassword] = useState(false);
   function submitForm(e) {
     e.preventDefault();
     onSignIn({ username, password })
   }
+  
 
   return (
     <>
@@ -21,12 +22,18 @@ function Login({ onSignIn }) {
           required />
         <p className="form_p">Пароль</p>
         <input
-          type="password"
-          placeholder="Введите пароль"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required />
-        <button type="submit" style={{ alignSelf: 'center' }}>Войти</button>
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Введите пароль"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          {/* <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            style={{ marginLeft: '5px' }}
+          ></button> */}
+        <button type="submit" className="form__showpass">Войти</button>
       </form>
     </>
   );

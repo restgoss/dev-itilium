@@ -5,15 +5,15 @@ import ProtectedRoute from './utils/ProtectedRoute';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import api from './utils/Api';
-import Footer from './components/Footer/Footer';
 import LoadingPage from './pages/LoadingPage';
 import IncidentDetails from './pages/IncidentDetails';
 import Header from './components/Header/Header';
 import AddNewIncident from './pages/AddNewIncident';
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('jwt'));
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [incidentsList, setIncidentsList] = useState([]);
+  const [isPopupOpened, setPopupOpened] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -21,23 +21,25 @@ function App() {
     try {
       setIsLoading(true);
       const token = btoa(`${username}:${password}`);
+      console.log(isLoggedIn);
       const res = await api.Login(token);
       localStorage.setItem('jwt', token);
       localStorage.setItem('currentUserUuid', res.UTekP);
       localStorage.setItem('currentPhysUuid', res.UFiz);
       localStorage.setItem('currentIniciatorUuid', res.UIniciator);
       setIsLoggedIn(true);
-      console.log(isLoggedIn);
       navigate('/profile');
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
+      console.log(isLoggedIn);
       localStorage.clear();
     } finally {
+      console.log(isLoggedIn);
       setIsLoading(false);
       fetchIncidents();
     }
   }
-  
+
   const onSignOut = () => {
     localStorage.clear();
     setIsLoggedIn(false);
@@ -54,7 +56,6 @@ function App() {
       }
       const token = localStorage.getItem('jwt');
       const res = await api.addNewIncident(token, body);
-      console.log(res);
     } catch (error) {
       console.log(error);
     } finally {
@@ -75,11 +76,10 @@ function App() {
   }
 
   useEffect(() => {
-    if (localStorage.getItem('jwt')) {
-      setIsLoggedIn(true);
+    if (isLoggedIn) {
       fetchIncidents();
     }
-  }, [location]);
+  }, [location, isLoggedIn]);
 
   if (isLoading) {
     return <LoadingPage text={'Загрузка...'} />
@@ -88,7 +88,7 @@ function App() {
   return (
     <>
       <div className="App">
-      <Header isLoggedIn={isLoggedIn} onSignOut={onSignOut} />
+        <Header isLoggedIn={isLoggedIn} onSignOut={onSignOut} setPopupOpened={setPopupOpened} />
         <Routes>
           <Route path='/sign-in' element={<Login onSignIn={onSignIn} />} />
           <Route
@@ -97,7 +97,9 @@ function App() {
               <ProtectedRoute
                 isLoggedIn={isLoggedIn}
                 incidentsList={incidentsList}
-                component={Profile} 
+                isPopupOpened={isPopupOpened}
+                setPopupOpened={setPopupOpened}
+                component={Profile}
               />
             }
           >
