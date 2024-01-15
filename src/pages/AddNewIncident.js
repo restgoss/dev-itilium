@@ -3,6 +3,7 @@ import cross from '../utils/images/cross.svg';
 import { Services } from "../utils/Constants";
 import api from "../utils/Api";
 import loading from '../utils/images/loading.gif';
+import error from '../utils/images/error.png';
 import success from '../utils/images/success.png';
 
 function AddNewIncident({ isPopupOpened, setPopupOpened }) {
@@ -12,10 +13,24 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
     const [selectedServiceUuid, setSelectedServiceUuid] = useState('');
     const [selectedServiceComponents, setSelectedServiceComponents] = useState([]);
     const [selectedServiceComponent, setSelectedServiceComponent] = useState();
+    const [step2Error, setStep2Error] = useState('');
+    const [currentStep, setCurrentStep] = useState(0);
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleNextStep = () => {
+        setCurrentStep(currentStep + 1);
+    };
+
+    const handlePrevStep = () => {
+        setCurrentStep(currentStep - 1);
+    };
+
 
     const [topic, setTopic] = useState('');
     const [description, setDescription] = useState('');
     const handleClosePopup = () => {
+        window.location.reload();
         setTopic('');
         setDescription('');
         setPopupOpened(false);
@@ -51,6 +66,7 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            setIsLoading(true);
             const token = localStorage.getItem('jwt');
             const body = {
                 "Topic": `${topic}`,
@@ -67,37 +83,24 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
         } catch (error) {
             console.log(error);
         } finally {
+            setCurrentStep(2);
+            setIsLoading(false);
             setSuccessMessage(true);
+            const token = localStorage.getItem('jwt');
+            const iniciatorUuid = localStorage.getItem('currentIniciatorUuid');
+            const res = await api.getIncidents(token, iniciatorUuid);
         }
     };
-
-    const servicesContainerRef1 = useRef(null);
-    const servicesContainerRef2 = useRef(null);
-
-    const handleWheelScroll = (e, containerId) => {
-        const container = document.getElementById(containerId);
-        if (container) {
-            container.scrollLeft += e.deltaY;
-        }
-    };
-
     return (
         <>
             <div className={isPopupOpened ? `incident-popup incident-popup_active` : `incident-popup`}>
-                <button src={cross} onClick={() => setPopupOpened(false)} className="incident-popup__close-button"></button>
                 <div className="incident-popup__body">
-                    {successMessage ? (
+                    <button src={cross} onClick={() => setPopupOpened(false)} className="incident-popup__close-button"></button>
+                    {currentStep === 0 && (
                         <>
-                            <img className="incident-popup__img" src={success} alt=""></img>
-                            <p className="incident-popup__success">Обращение успешно зарегистрировано!</p>
-                            <button className="incident-popup__button" onClick={handleClosePopup}>В профиль</button>
-                        </>
-                    ) : (
-                        <>
+                            <p className="incident-popup__paragraph">Выберите услугу из списка:</p>
                             <div id="servicesContainer1"
-                                ref={servicesContainerRef1}
-                                className="incident-popup__services-div"
-                                onWheel={(e) => handleWheelScroll(e, "servicesContainer1")}>
+                                className="incident-popup__services-div">
                                 {Services.map((item) => (
 
                                     <div className={selectedServiceUuid === item.ServiceUuid ? `incident-popup__services-item incident-popup__services-item_active` : `incident-popup__services-item`} key={item.ServiceUuid} onClick={() => setSelectedServiceUuid(item.ServiceUuid)}>
@@ -112,32 +115,74 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
                                 </div>
                             ) : (
                                 selectedServiceComponents.length > 0 ? (
-
-                                    <div id="servicesContainer2"
-                                        ref={servicesContainerRef2}
-                                        className="incident-popup__services-div"
-                                        onWheel={(e) => handleWheelScroll(e, "servicesContainer2")}>
-                                        {selectedServiceComponents.map((item) => (
-                                            <div className={selectedServiceComponent && selectedServiceComponent.ServiceComponentUuid === item.ServiceComponentUuid ? `incident-popup__services-item incident-popup__services-item_active` : `incident-popup__services-item`} key={item.ServiceComponent} onClick={() => setSelectedServiceComponent(item)}>
-                                                <p>{item.ServiceComponent}</p>
-                                            </div>
-                                        ))}
-                                    </div>
+                                    <>
+                                        <p className="incident-popup__paragraph">С чем вам нужна помощь?</p>
+                                        <div id="servicesContainer2"
+                                            className="incident-popup__services-div">
+                                            {selectedServiceComponents.map((item) => (
+                                                <div className={selectedServiceComponent && selectedServiceComponent.ServiceComponentUuid === item.ServiceComponentUuid ? `incident-popup__services-item incident-popup__services-item_active` : `incident-popup__services-item`} key={item.ServiceComponent} onClick={() => setSelectedServiceComponent(item)}>
+                                                    <p>{item.ServiceComponent}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </>
                                 ) : null
                             )}
-                            <form className="incident-popup__form" onSubmit={(e) => handleSubmit(e)}>
-                                <p>Тема обращения</p>
-                                <input id="topic" placeholder="Тема обращения" value={topic} onChange={(e) => setTopic(e.target.value)}></input>
-                                <p>Описание</p>
-                                <input id="description" placeholder="Описание обращения" onChange={(e) => setDescription(e.target.value)} required></input>
-                                <button>Отправить</button>
-                            </form>
+                            <span className="incident-popup__span-error">{step2Error}</span>
+                            <button className="incident-popup__button" onClick={() => {
+                                if (selectedServiceComponent) {
+                                    setStep2Error('');
+                                    handleNextStep();
+                                } else {
+                                    setStep2Error('Выберите услугу');
+                                }
+                            }}> Далее</button>
+                        </>
+                    )}
+                    {currentStep === 1 && (
+                        <>
+                            {isLoading ?
+                                (<>
+                                    <div className="incident-popup__loading">
+                                        <img className="incident-popup__services-loading" src={loading} alt="Loading"></img>
+                                    </div>
+
+                                </>) : (
+                                    <>
+                                        <p className="incident-popup__paragraph">Выбранная услуга: <span>{selectedServiceComponent.ServiceComponent}</span></p>
+                                        <button className="incident-popup__button-back" onClick={handlePrevStep}>🡄</button>
+                                        <form className="incident-popup__form" onSubmit={(e) => handleSubmit(e)}>
+                                            <p className="incident-popup__paragraph">Описание:</p>
+                                            <input id="description" placeholder="Описание обращения" onChange={(e) => setDescription(e.target.value)} required></input>
+                                            <button className="incident-popup__button">Отправить</button>
+                                        </form>
+                                    </>
+                                )}
+
+                        </>
+                    )}
+                    {currentStep === 2 && (
+                        <>
+                            {successMessage ? (
+                                <>
+                                    <img className="incident-popup__img" src={success} alt=""></img>
+                                    <p className="incident-popup__success">Обращение успешно зарегистрировано!</p>
+                                    <button className="incident-popup__button" onClick={handleClosePopup}>В профиль</button>
+                                </>
+                            ) : (
+                                <>
+                                    <img className="incident-popup__img" src={error} alt=""></img>
+                                    <p className="incident-popup__success">Произошла ошибка.</p>
+                                    <p className="incident-popup__success">Ваше обращение не было зарегистрировано, попробуйте позже.</p>
+                                    <button className="incident-popup__button" onClick={handleClosePopup}>В профиль</button>
+                                </>
+                            )}
                         </>
                     )}
                 </div>
-            </div>
+            </div >
         </>
-    );
-}
 
+    )
+}
 export default AddNewIncident;

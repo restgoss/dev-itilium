@@ -9,6 +9,12 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
   const [selectedIncident, setSelectedIncident] = useState(null);
   const [isSelectedIncidentLoading, setSelectedIncidentLoading] = useState(true);
   const [sortedIncidentsList, setIncidentsList] = useState([]);
+  const [showOnlyInProgress, setShowOnlyInProgress] = useState(false);
+
+  const handleCheckboxChange = () => {
+    setShowOnlyInProgress((prevValue) => !prevValue); // Step 3
+  };
+
   // sort logics
   const [sortParams, setSortParams] = useState({
     field: 'date',
@@ -77,6 +83,8 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
       <div className='profile-page-block'>
         <div className='profile-div'>
           <div className='incident-list__table'>
+          <div className='incident-list__field'>Отображать только заявки в работе<input className='incident-list__field__input' type='checkbox' checked={showOnlyInProgress}
+              onChange={handleCheckboxChange}></input></div>
             <div className='incident-list__header'>
               <div className='incident-list__cell first-column' onClick={() => setSortedFieldDate()}>
                 Дата
@@ -100,16 +108,18 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
                   )
                 )}
               </div>
-            </div>
+            </div>  
             <div className='incident-list__body'>
-              {sortedIncidentsList.map((incident) => (
+              {sortedIncidentsList
+              .filter((incident) => !showOnlyInProgress || incident.state !== 'Отклонено')
+              .map((incident) => (
                 <div
                   key={incident.linkUuid}
                   className='incident-list__row'
                   onClick={() => setSelectedIncidentUuid(incident.linkUuid)}
                 >
                   <div className='incident-list__cell first-column'>{incident.date.split(':').slice(0, -1).join(':')}</div>
-                  <div className='incident-list__cell second-column'>{incident.number}</div>
+                  <div className='incident-list__cell second-column'>{incident.number.replace(/^0+/, '')}</div>
                   <div className='incident-list__cell third-column'>{incident.topic}</div>
                   <div className='incident-list__cell fourth-column'>{incident.state}</div>
                 </div>

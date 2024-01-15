@@ -3,7 +3,7 @@ export const Services = [
         "Service": "1С",
         "ServiceUuid": "85e195dd-7e13-11ee-90a2-0050569f9f23",
         "ServiceCode": "0000000085"
-    },
+        },
     {
         "Service": "Банки-клиенты | СБИС",
         "ServiceUuid": "85e1969d-7e13-11ee-90a2-0050569f9f23",
@@ -25,16 +25,6 @@ export const Services = [
         "ServiceCode": "0000000084"
     },
     {
-        "Service": "Доступ к 1С",
-        "ServiceUuid": "49cf2241-5902-11ed-9b06-0050569f5691",
-        "ServiceCode": "0000000043"
-    },
-    {
-        "Service": "Доступ к порталам",
-        "ServiceUuid": "49cf226b-5902-11ed-9b06-0050569f5691",
-        "ServiceCode": "0000000049"
-    },
-    {
         "Service": "Локальная сеть | Wi-Fi | Интернет",
         "ServiceUuid": "85e1955a-7e13-11ee-90a2-0050569f9f23",
         "ServiceCode": "0000000072"
@@ -45,24 +35,9 @@ export const Services = [
         "ServiceCode": "0000000080"
     },
     {
-        "Service": "Новый пользователь",
-        "ServiceUuid": "49cf2239-5902-11ed-9b06-0050569f5691",
-        "ServiceCode": "0000000041"
-    },
-    {
         "Service": "Оборудование ",
         "ServiceUuid": "85e19692-7e13-11ee-90a2-0050569f9f23",
         "ServiceCode": "0000000089"
-    },
-    {
-        "Service": "Печать",
-        "ServiceUuid": "49cf222e-5902-11ed-9b06-0050569f5691",
-        "ServiceCode": "0000000039"
-    },
-    {
-        "Service": "Почта",
-        "ServiceUuid": "49cf2214-5902-11ed-9b06-0050569f5691",
-        "ServiceCode": "0000000035"
     },
     {
         "Service": "Программное обеспечение",
@@ -75,19 +50,9 @@ export const Services = [
         "ServiceCode": "0000000074"
     },
     {
-        "Service": "Сеть",
-        "ServiceUuid": "49cf21fb-5902-11ed-9b06-0050569f5691",
-        "ServiceCode": "0000000029"
-    },
-    {
         "Service": "Сопровождение оргтехники",
         "ServiceUuid": "85e195c2-7e13-11ee-90a2-0050569f9f23",
         "ServiceCode": "0000000082"
-    },
-    {
-        "Service": "Терминальный доступ",
-        "ServiceUuid": "49cf2281-5902-11ed-9b06-0050569f5691",
-        "ServiceCode": "0000000053"
     },
     {
         "Service": "Удаленный доступ | VPN | VDI",
@@ -98,11 +63,6 @@ export const Services = [
         "Service": "Файловые ресурсы | Порталы | Системы",
         "ServiceUuid": "85e1966c-7e13-11ee-90a2-0050569f9f23",
         "ServiceCode": "0000000087"
-    },
-    {
-        "Service": "Файловые хранилища",
-        "ServiceUuid": "49cf2247-5902-11ed-9b06-0050569f5691",
-        "ServiceCode": "0000000045"
     },
     {
         "Service": "Электронная почта",

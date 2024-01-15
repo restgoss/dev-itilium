@@ -31,10 +31,9 @@ function App() {
       navigate('/profile');
     } catch (error) {
       console.log(error.message);
-      console.log(isLoggedIn);
+      setIsLoggedIn(false);
       localStorage.clear();
     } finally {
-      console.log(isLoggedIn);
       setIsLoading(false);
       fetchIncidents();
     }
@@ -81,6 +80,15 @@ function App() {
     }
   }, [location, isLoggedIn]);
 
+  useEffect(() => {
+    const token = localStorage.getItem('jwt');
+    if (token && !isLoggedIn) {
+      setIsLoggedIn(true);
+      fetchIncidents();
+      navigate('/profile');
+    }
+  }, []);
+
   if (isLoading) {
     return <LoadingPage text={'Загрузка...'} />
   }
@@ -94,17 +102,19 @@ function App() {
           <Route
             path='/profile'
             element={
-              <ProtectedRoute
-                isLoggedIn={isLoggedIn}
-                incidentsList={incidentsList}
-                isPopupOpened={isPopupOpened}
-                setPopupOpened={setPopupOpened}
-                component={Profile}
-              />
+              isLoggedIn ? (
+                <ProtectedRoute
+                  isLoggedIn={isLoggedIn}
+                  incidentsList={incidentsList}
+                  isPopupOpened={isPopupOpened}
+                  setPopupOpened={setPopupOpened}
+                  component={Profile}
+                />
+              ) : (
+                <Navigate to='/sign-in' />
+              )
             }
-          >
-            <Route index={isLoggedIn ? <Navigate to='/profile' /> : <Navigate to='/sign-in' />} />
-          </Route>
+          />
 
           <Route path='/incident-details/:uuid' element={<IncidentDetails />} />
           <Route
