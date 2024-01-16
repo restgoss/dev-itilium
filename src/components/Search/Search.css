@@ -1,0 +1,18 @@
+.incident-list__search__div {
+    margin: 15px 15px 15px 25px;
+}
+
+
+.incident-list__search__input {
+    margin: 0;
+    width: 230px;
+    height: 35px;
+    padding: 0;
+    border-radius: 6px;
+    padding-left: 10px;
+}
+
+.incident-list__search__input::placeholder {
+    font-family: 'Circe';
+    font-size: 14px;
+}

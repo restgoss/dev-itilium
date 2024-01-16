@@ -8,7 +8,6 @@ function Header({ isLoggedIn, onSignOut, setPopupOpened }) {
     return (
       <header>
         <img className='header__logo' alt='Pridex' src={logo}></img>
-        {isLoggedIn ? <button className='button-add-new-incident' onClick={() => setPopupOpened(true)}>Создать новое обращение</button> : null}
         {isLoggedIn ? <img className='header__button' onClick={handleLogoutClick} alt='Выйти' src={logout}></img> : null}
       </header>
     );

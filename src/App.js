@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import { Navigate, Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import ProtectedRoute from './utils/ProtectedRoute';
-import Profile from './pages/Profile';
+import Profile from './pages/Profile/Profile';
 import Login from './pages/Login';
 import api from './utils/Api';
 import LoadingPage from './pages/LoadingPage';

@@ -67,11 +67,29 @@ input {
   border: 1px solid #d9d9d9;
 }
 
+.incident-list__scroll__track {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 10px;
+  /* Adjust width as needed */
+}
+
+.incident-list__scroll__thumb {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background-color: #ccc;
+  border-radius: 5px;
+}
+
 .incident-list__field {
+  position: relative;
   display: flex;
   align-items: center;
-  padding: 10px 0 10px 25px;
   border-bottom: 1px solid #d9d9d9;
+  max-height: 65px;
 }
 
 .incident-list__field__input {
@@ -145,12 +163,15 @@ input {
 }
 
 .incident-popup__button-back {
-  border: none;
-  background-color: transparent;
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 6px;
   position: absolute;
   left: 20px;
   top: 15px;
-  font-weight: bold;
   font-size: 20px;
   padding: 0;
 }
@@ -199,11 +220,6 @@ input {
   padding: 15px 0 15px 0;
 }
 
-::-webkit-scrollbar {
-  height: 0px;
-}
-
-
 .incident-popup__services-div {
   display: flex;
   padding: 20px;
@@ -231,6 +247,10 @@ input {
   -webkit-box-shadow: 0px 0px 15px 3px rgba(0, 189, 39, 0.33);
   -moz-box-shadow: 0px 0px 15px 3px rgba(0, 189, 39, 0.33);
   box-shadow: 0px 0px 15px 3px rgba(0, 189, 39, 0.33);
+}
+
+.incident-popup__services-item_inactive {
+  opacity: .5;
 }
 
 .incident-popup__services-loading {
@@ -406,38 +426,8 @@ header {
   border-right: 1px solid #d9d9d9;
 }
 
-.incident-list__body::-webkit-scrollbar {
-  background-color: transparent;
-  width: 6px;
-}
-
-.incident-list__body::-webkit-scrollbar-track {
-  background-color: transparent;
-}
-
-.incident-list__body::-webkit-scrollbar-thumb {
-  background-color: transparent;
-}
-
-.incident-list__body:hover::-webkit-scrollbar-thumb {
-  border-radius: 100px;
-  background-clip: content-box;
-  background-color: #00000075;
-}
-
-.incident-list__body:hover::-webkit-scrollbar-track {
-  background-color: transparent;
-}
-
-.incident-list__body:hover::-webkit-scrollbar {
-  background-color: transparent;
-}
-
-
-
-
 .incident-list__header {
-  height: 60px; 
+  height: 50px;
   display: flex;
   flex-direction: row;
   font-weight: bold;
@@ -446,26 +436,37 @@ header {
   top: 0;
   background-color: #fff;
   z-index: 1;
-  padding-right: 10px;
   align-items: center;
   border-radius: 6px 0 0 0;
 }
 
-.incident-list__body {
-  transition: .3s ease-in-out;
-  z-index: 0;
-  height: calc(100% - 104px);
-  scrollbar-gutter: auto;
-  overflow-y: auto;
+.incident-list__header #first-column {
+  width: 20%;
 }
 
-.incident-list__body:hover .incident-list__body::-webkit-scrollbar {
-  overflow-y: auto;
-  width: 10px;
+.incident-list__header #second-column {
+  width: 10%;
+}
+
+.incident-list__header #third-column {
+  width: 50%;
+}
+
+.incident-list__header #fourth-column {
+  width: 20%;
+}
+
+.incident-list__body {
+  display: flex;
+  flex-direction: column;
+  transition: .3s ease-in-out;
+  overflow: auto;
+  z-index: 0;
+  height: 650px;
 }
 
 .incident-list__row {
-  height: 84px;
+  height: 65px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -473,6 +474,10 @@ header {
   transition: .3s ease-in-out;
   user-select: none;
   width: 100%;
+}
+
+.incident-list__row_active {
+  background-color: #d9d9d9;
 }
 
 .incident-list__row:hover {
@@ -486,27 +491,17 @@ header {
 
 .first-column {
   width: 20%;
-  margin-left: 25px;
 }
 
 .second-column {
   width: 10%;
 }
 
-.second-column:hover {
-  cursor: default;
-}
-
 .third-column {
-  width: 45%;
+  width: 50%;
 }
 
-.third-column:hover {
-  cursor: default;
-}
-
-.fourth-column{
-  margin-left: 25px;
+.fourth-column {
   width: 20%;
 }
 
@@ -515,6 +510,7 @@ header {
 }
 
 .incident-list__cell {
+  display: flex;
   transition: .3s ease-in-out;
   text-align: left;
   text-overflow: ellipsis;
@@ -535,10 +531,9 @@ header {
 
 .incident-info__header {
   width: 100%;
-  height: 60px;
+  height: 65px;
   display: flex;
   flex-direction: row;
-  border: 1px solid #000000;
   border-bottom: 1px solid #D9D9D9;
   background-color: #000000;
   align-items: center;
@@ -599,7 +594,7 @@ header {
 .incident-info__description {
   margin: 0;
   text-align: justify;
-  padding: 0 20px 20px 20px; 
+  padding: 0 20px 20px 20px;
 }
 
 .incident-info__curator {
@@ -620,6 +615,25 @@ header {
 
 .incident-info__selectincident {
   margin-top: 60px;
+}
+
+@media screen and (max-width: 767px) {}
+
+@media screen and (max-width: 1023px) {}
+
+@media screen and (max-width: 1279px) {
+
+  .incident-info__selectincident {
+    margin: 0;
+  }
+
+  .incident-list__add-button {
+    width: 60px;
+  }
+
+  .incident-list__add-button__paragraph {
+    display: none;
+  }
 }
 
 @keyframes App-logo-spin {

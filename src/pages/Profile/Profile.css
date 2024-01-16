@@ -1,0 +1,38 @@
+.incident-list__add-button {
+    position: absolute;
+    right: 25px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    border-radius: 6px;
+    width: 160px;
+    height: 35px;
+    background-color: #000;
+    color: #fff;
+    user-select: none;
+}
+
+.incident-list__add-button:hover {
+    cursor: pointer;
+}
+
+.incident-list__add-button__plus {
+    font-weight: 100;
+}
+
+.incident-list__add-button__paragraph {
+    margin: 0;
+    font-size: 14px;
+}
+
+.incident-list__add-button__plus {
+    margin: 0;
+}
+
+@media screen and (max-width: 1279px) {
+    .incident-list__add-button {
+        width: 60px;
+        margin: 0 10px 0 10px;
+    }
+}

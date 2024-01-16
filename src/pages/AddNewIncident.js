@@ -12,7 +12,7 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
 
     const [selectedServiceUuid, setSelectedServiceUuid] = useState('');
     const [selectedServiceComponents, setSelectedServiceComponents] = useState([]);
-    const [selectedServiceComponent, setSelectedServiceComponent] = useState();
+    const [selectedServiceComponent, setSelectedServiceComponent] = useState('');
     const [step2Error, setStep2Error] = useState('');
     const [currentStep, setCurrentStep] = useState(0);
 
@@ -26,13 +26,15 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
         setCurrentStep(currentStep - 1);
     };
 
-
     const [topic, setTopic] = useState('');
     const [description, setDescription] = useState('');
     const handleClosePopup = () => {
-        window.location.reload();
+        setCurrentStep(0);
         setTopic('');
         setDescription('');
+        setSelectedServiceUuid('');
+        setSelectedServiceComponents('');
+        setSelectedServiceComponent('');
         setPopupOpened(false);
         setSuccessMessage(false);
     };
@@ -95,15 +97,24 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
         <>
             <div className={isPopupOpened ? `incident-popup incident-popup_active` : `incident-popup`}>
                 <div className="incident-popup__body">
-                    <button src={cross} onClick={() => setPopupOpened(false)} className="incident-popup__close-button"></button>
+                    <button src={cross} onClick={() => handleClosePopup()} className="incident-popup__close-button"></button>
                     {currentStep === 0 && (
                         <>
-                            <p className="incident-popup__paragraph">Выберите услугу из списка:</p>
+                            <p className="incident-popup__paragraph">С чем вам нужна помощь?</p>
                             <div id="servicesContainer1"
                                 className="incident-popup__services-div">
                                 {Services.map((item) => (
-
-                                    <div className={selectedServiceUuid === item.ServiceUuid ? `incident-popup__services-item incident-popup__services-item_active` : `incident-popup__services-item`} key={item.ServiceUuid} onClick={() => setSelectedServiceUuid(item.ServiceUuid)}>
+                                    <div
+                                        className={
+                                            selectedServiceUuid === item.ServiceUuid
+                                                ? `incident-popup__services-item incident-popup__services-item_active`
+                                                : selectedServiceUuid && selectedServiceUuid !== item.ServiceUuid
+                                                    ? `incident-popup__services-item incident-popup__services-item_inactive`
+                                                    : `incident-popup__services-item`
+                                        }
+                                        key={item.ServiceUuid}
+                                        onClick={() => setSelectedServiceUuid(item.ServiceUuid)}
+                                    >
                                         <p>{item.Service}</p>
                                     </div>
 
@@ -116,15 +127,30 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
                             ) : (
                                 selectedServiceComponents.length > 0 ? (
                                     <>
-                                        <p className="incident-popup__paragraph">С чем вам нужна помощь?</p>
-                                        <div id="servicesContainer2"
-                                            className="incident-popup__services-div">
+                                        <p className="incident-popup__paragraph">Выберите услугу:</p>
+                                        <div
+                                            id="servicesContainer2"
+                                            className="incident-popup__services-div"
+                                        >
                                             {selectedServiceComponents.map((item) => (
-                                                <div className={selectedServiceComponent && selectedServiceComponent.ServiceComponentUuid === item.ServiceComponentUuid ? `incident-popup__services-item incident-popup__services-item_active` : `incident-popup__services-item`} key={item.ServiceComponent} onClick={() => setSelectedServiceComponent(item)}>
+                                                <div
+                                                    className={
+                                                        selectedServiceComponent &&
+                                                            selectedServiceComponent.ServiceComponentUuid === item.ServiceComponentUuid
+                                                            ? `incident-popup__services-item incident-popup__services-item_active`
+                                                            : selectedServiceComponent &&
+                                                                selectedServiceComponent.ServiceComponentUuid !== item.ServiceComponentUuid
+                                                                ? `incident-popup__services-item incident-popup__services-item_inactive`
+                                                                : `incident-popup__services-item`
+                                                    }
+                                                    key={item.ServiceComponent}
+                                                    onClick={() => setSelectedServiceComponent(item)}
+                                                >
                                                     <p>{item.ServiceComponent}</p>
                                                 </div>
                                             ))}
                                         </div>
+
                                     </>
                                 ) : null
                             )}
@@ -150,7 +176,7 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
                                 </>) : (
                                     <>
                                         <p className="incident-popup__paragraph">Выбранная услуга: <span>{selectedServiceComponent.ServiceComponent}</span></p>
-                                        <button className="incident-popup__button-back" onClick={handlePrevStep}>🡄</button>
+                                        <button className="incident-popup__button-back" onClick={handlePrevStep}>&#8249;</button>
                                         <form className="incident-popup__form" onSubmit={(e) => handleSubmit(e)}>
                                             <p className="incident-popup__paragraph">Описание:</p>
                                             <input id="description" placeholder="Описание обращения" onChange={(e) => setDescription(e.target.value)} required></input>
@@ -167,14 +193,14 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
                                 <>
                                     <img className="incident-popup__img" src={success} alt=""></img>
                                     <p className="incident-popup__success">Обращение успешно зарегистрировано!</p>
-                                    <button className="incident-popup__button" onClick={handleClosePopup}>В профиль</button>
+                                    <button className="incident-popup__button" onClick={handleClosePopup}>На главную</button>
                                 </>
                             ) : (
                                 <>
                                     <img className="incident-popup__img" src={error} alt=""></img>
                                     <p className="incident-popup__success">Произошла ошибка.</p>
                                     <p className="incident-popup__success">Ваше обращение не было зарегистрировано, попробуйте позже.</p>
-                                    <button className="incident-popup__button" onClick={handleClosePopup}>В профиль</button>
+                                    <button className="incident-popup__button" onClick={handleClosePopup}>На главную</button>
                                 </>
                             )}
                         </>

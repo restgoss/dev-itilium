@@ -1,0 +1,143 @@
+fieldset {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.incident-sort__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px #d9d9d9 solid;
+    border-radius: 6px;
+    width: 150px;
+    height: 35px;
+    user-select: none;
+}
+
+.incident-sort__button:hover {
+    cursor: pointer;
+}
+
+.incident-sort__button_paragraph {
+    font-size: 14px;
+}
+
+.incident-sort__div {
+    position: absolute;
+    top: 25%;
+    left: 282px;
+    font-size: 14px;
+    font-family: 'Circe';
+    font-weight: normal;
+    user-select: none;
+    z-index: 12;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    width: 300px;
+    -webkit-box-shadow: 0px 8px 12px 0px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 8px 12px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 8px 12px 0px rgba(0, 0, 0, 0.2);
+}
+
+
+
+.incident-sort__item {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    width: calc(100% - 15px);
+    padding-left: 15px;
+    transition: .3s ease-in-out;
+}
+
+.incident-sort__item:hover {
+    background-color: #d9d9d9;
+    cursor: pointer;
+}
+
+.incident-sort__item:last-of-type:hover {
+    cursor: default;
+    background-color: #fff;
+}
+
+.incident-sort__item__checkbox {
+    margin: 0;
+    width: 15px;
+    height: 15px;
+}
+
+.incident-sort__item__paragraph {
+    margin-left: 10px;
+}
+
+
+.switch {
+    margin-left: 15px;
+    position: relative;
+    display: inline-block;
+    width: 25px;
+    height: 12px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 10px;
+    width: 10px;
+    left: 1px;
+    bottom: 1px;
+    background-color: rgb(255, 255, 255);
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: #000000;
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #000000;
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(13px);
+    -ms-transform: translateX(13px);
+    transform: translateX(13px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+@media screen and (max-width: 1279px) {
+    .incident-sort__button {
+        width: 60px;
+        margin-right: 15px;
+    }
+}
