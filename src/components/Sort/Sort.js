@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Sort.css';
 
-const Sort = ({setSortOption, setTicketsInProgress}) => {
+const Sort = ({ setSortOption, setTicketsInProgress }) => {
     const [isSortOpened, setSortOpened] = useState(false);
     const [selectedSortOption, setSelectedSortOption] = useState('newest');
     const [showOnlyInProgress, setShowOnlyInProgress] = useState(true);
@@ -17,14 +17,14 @@ const Sort = ({setSortOption, setTicketsInProgress}) => {
         setSortOption(option);
         setSortOpened(false);
     };
-    
+
 
     const handleCheckboxChange = (event) => {
         event.stopPropagation();
         setShowOnlyInProgress(event.target.checked);
         setTicketsInProgress(event.target.checked);
     };
-    
+
     useEffect(() => {
         setSortOpened(false);
     }, [selectedSortOption])
@@ -57,7 +57,7 @@ const Sort = ({setSortOption, setTicketsInProgress}) => {
                     <div className="incident-sort__item" onClick={(event) => event.stopPropagation()}>
                         <p className="incident-sort__item__paragraph">Отображать заявки только в работе</p>
                         <label className="switch">
-                            <input type="checkbox" onChange={handleCheckboxChange} checked={showOnlyInProgress}/>
+                            <input type="checkbox" onChange={handleCheckboxChange} checked={showOnlyInProgress} />
                             <span className="slider round"></span>
                         </label>
                     </div>

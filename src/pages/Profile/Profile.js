@@ -12,7 +12,6 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
   const [selectedIncident, setSelectedIncident] = useState(null);
   const [isSelectedIncidentLoading, setSelectedIncidentLoading] = useState(true);
   const [sortedIncidentsList, setIncidentsList] = useState([]);
-  const [showOnlyInProgress, setShowOnlyInProgress] = useState(false);
 
   const [sortOption, setSortOption] = useState('newest');
   const [ticketsInProgress, setTicketsInProgress] = useState(true);
@@ -33,6 +32,8 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
       case 'numberIncrement':
         sortedList.sort((a, b) => parseInt(a.number) - parseInt(b.number));
         break;
+      default:
+        console.log('defaultcase');
     }
     return sortedList;
   };
@@ -42,7 +43,7 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
     setIncidentsList(sortedList);
   }, [incidentsList, sortOption]);
 
-
+  
   useEffect(() => {
     const fetchSelectedIncident = async () => {
       try {
@@ -60,12 +61,6 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
       fetchSelectedIncident();
     }
   }, [selectedIncidentUuid]);
-
-  const handleWheelScroll = (e) => {
-    const delta = e.deltaY || e.detail || e.wheelDelta;
-    const scrollSpeed = 1;
-    document.querySelector('.incident-list__body').scrollTop += delta * scrollSpeed;
-  };
 
   return (
     <>
@@ -87,21 +82,25 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
               <div className='incident-list__header__cell' id='fourth-column'>Статус</div>
             </div>
             <div className='incident-list__body' >
-            <OverlayScrollbarsComponent options={{ scrollbars: { autoHide: "leave" } }}>
-              {sortedIncidentsList
-                .map((incident) => (
-                  <div
-                    key={incident.linkUuid}
-                    className={selectedIncidentUuid && selectedIncidentUuid === incident.linkUuid ? 'incident-list__row incident-list__row_active' : 'incident-list__row'}
-                    onClick={() => setSelectedIncidentUuid(incident.linkUuid)}
-                  >
-                    <div className='incident-list__cell first-column'>{incident.date.split(':').slice(0, -1).join(':')}</div>
-                    <div className='incident-list__cell second-column'>{incident.number.replace(/^0+/, '')}</div>
-                    <div className='incident-list__cell third-column' style={{ display: 'block' }}>{incident.topic}</div>
-                    <div className='incident-list__cell fourth-column'>{incident.state}</div>
-                  </div>
-                ))}
-                 </OverlayScrollbarsComponent>
+              <OverlayScrollbarsComponent options={{ scrollbars: { autoHide: "leave" } }}>
+                {sortedIncidentsList
+                  .filter((item) => 
+                  (ticketsInProgress && !['Отклонено', 'Не согласовано', 'Закрыто'].includes(item.state)) ||
+                  (!ticketsInProgress)
+                )
+                  .map((incident) => (
+                    <div
+                      key={incident.linkUuid}
+                      className={selectedIncidentUuid && selectedIncidentUuid === incident.linkUuid ? 'incident-list__row incident-list__row_active' : 'incident-list__row'}
+                      onClick={() => setSelectedIncidentUuid(incident.linkUuid)}
+                    >
+                      <div className='incident-list__cell first-column'>{incident.date.split(':').slice(0, -1).join(':')}</div>
+                      <div className='incident-list__cell second-column'>{incident.number.replace(/^0+/, '')}</div>
+                      <div className='incident-list__cell third-column' style={{ display: 'block' }}>{incident.topic}</div>
+                      <div className='incident-list__cell fourth-column'>{incident.state}</div>
+                    </div>
+                  ))}
+              </OverlayScrollbarsComponent>
             </div>
           </div>
           <div className='incident-info__div'>
