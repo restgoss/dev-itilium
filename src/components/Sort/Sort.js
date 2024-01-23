@@ -29,6 +29,24 @@ const Sort = ({ setSortOption, setTicketsInProgress }) => {
         setSortOpened(false);
     }, [selectedSortOption])
 
+    useEffect(() => {
+        const handleOverlayClick = (event) => {
+            const sortDiv = document.querySelector('.incident-sort__div');
+            if (sortDiv && !sortDiv.contains(event.target)) {
+                setSortOpened(false);
+            }
+        }
+        if (isSortOpened) {
+            document.addEventListener('click', handleOverlayClick);
+        } else {
+            document.removeEventListener('click', handleOverlayClick);
+        }
+        return () => {
+            document.removeEventListener('click', handleOverlayClick);
+        };
+    }, [isSortOpened]);
+
+
     return (
         <div
             className={isSortOpened ? 'incident-sort__div' : 'incident-sort__button'}
@@ -63,7 +81,7 @@ const Sort = ({ setSortOption, setTicketsInProgress }) => {
                     </div>
                 </fieldset>
             ) : (
-                <p className="incident-sort__button_paragraph">Фильтр</p>
+                'Фильтр'
             )}
         </div>
     );

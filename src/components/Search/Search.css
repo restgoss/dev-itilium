@@ -1,11 +1,14 @@
 .incident-list__search__div {
-    margin: 15px 15px 15px 25px;
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    width: 100%;
 }
 
 
 .incident-list__search__input {
     margin: 0;
-    width: 230px;
+    width: 100%;
     height: 35px;
     padding: 0;
     border-radius: 6px;

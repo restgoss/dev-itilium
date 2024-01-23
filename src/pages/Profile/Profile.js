@@ -97,7 +97,7 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
                       <div className='incident-list__cell first-column'>{incident.date.split(':').slice(0, -1).join(':')}</div>
                       <div className='incident-list__cell second-column'>{incident.number.replace(/^0+/, '')}</div>
                       <div className='incident-list__cell third-column' style={{ display: 'block' }}>{incident.topic}</div>
-                      <div className='incident-list__cell fourth-column'>{incident.state}</div>
+                      <div className='incident-list__cell fourth-column' style={{ display: 'block' }}>{incident.state}</div>
                     </div>
                   ))}
               </OverlayScrollbarsComponent>

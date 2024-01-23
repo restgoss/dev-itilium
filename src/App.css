@@ -86,10 +86,16 @@ input {
 
 .incident-list__field {
   position: relative;
-  display: flex;
+  display: grid;
+  padding: 0 15px 0 15px;
+  gap: 15px 15px;
+  grid-template-columns: 5fr 3fr 3fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
   align-items: center;
   border-bottom: 1px solid #d9d9d9;
-  max-height: 65px;
+  height: 65px;
 }
 
 .incident-list__field__input {
@@ -141,6 +147,13 @@ input {
   border-radius: 8px;
 }
 
+.incident-popup__text-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 80%;
+}
+
 .incident-popup__paragraph {
   font-weight: bold;
   margin: 0;
@@ -151,8 +164,8 @@ input {
 }
 
 .incident-popup__form {
+  font-family: inherit;
   width: 100%;
-  margin-top: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -163,14 +176,14 @@ input {
 }
 
 .incident-popup__button-back {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   background-color: #fff;
   color: #000;
   border: 1px solid #000;
   border-radius: 6px;
   position: absolute;
-  left: 20px;
+  left: 15px;
   top: 15px;
   font-size: 20px;
   padding: 0;
@@ -183,6 +196,7 @@ input {
   width: 150px;
   height: 50px;
   border-radius: 6px;
+  font-family: inherit;
 }
 
 .incident-popup__form button:hover {
@@ -190,12 +204,15 @@ input {
 }
 
 #description {
+  margin: 0 0 25px 0;
   padding-bottom: 150px;
 }
 
 .incident-popup__form input {
+  font-family: inherit;
   margin: 20px 0 20px 0;
   width: 80%;
+  font-size: 14px;
 }
 
 .incident-popup__img {
@@ -208,6 +225,8 @@ input {
 }
 
 .incident-popup__button {
+  font-family: inherit;
+  font-size: 14px;
   border: none;
   background-color: #000;
   color: #fff;
@@ -233,9 +252,23 @@ input {
   display: flex;
   height: 50px;
   border: 1px solid #d9d9d9;
+  background-color: #fff;
   align-items: center;
   justify-content: center;
   user-select: none;
+}
+
+.incident-popup__services__layout {
+  transition: .3s ease-in-out;
+  display: none;
+  height: 0;
+}
+
+.incident-popup__services__layout_active {
+  width: 100%;
+  height: auto;
+  background-color: #f3f3f3;
+  padding: 15px 0 15px 0;
 }
 
 .incident-popup__services-item:hover {
@@ -244,19 +277,19 @@ input {
 
 .incident-popup__services-item_active {
   border: transparent 1px solid;
-  -webkit-box-shadow: 0px 0px 15px 3px rgba(0, 189, 39, 0.33);
-  -moz-box-shadow: 0px 0px 15px 3px rgba(0, 189, 39, 0.33);
-  box-shadow: 0px 0px 15px 3px rgba(0, 189, 39, 0.33);
+  -webkit-box-shadow: 0px 0px 17px 0px rgba(0, 194, 255, 0.35);
+  -moz-box-shadow: 0px 0px 17px 0px rgba(0, 194, 255, 0.35);
+  box-shadow: 0px 0px 17px 0px rgba(0, 194, 255, 0.35);
 }
 
 .incident-popup__services-item_inactive {
-  opacity: .5;
+  opacity: .3;
 }
 
 .incident-popup__services-loading {
   padding: 20px;
-  width: 40px;
-  height: 40px;
+  width: 25px;
+  height: 25px;
 }
 
 .incident-popup__services-item p {
@@ -264,17 +297,19 @@ input {
 }
 
 .incident-popup__close-button {
-  z-index: 1000;
+  width: 30px;
+  height: 30px;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 6px;  z-index: 1000;
   position: absolute;
-  right: 20px;
-  top: 20px;
-  width: 20px;
-  height: 20px;
+  right: 15px;
+  top: 15px;
+  background-size: 20px 20px;
   background-image: url('./utils/images/cross.svg');
   background-position: center;
   background-repeat: no-repeat;
-  border: none;
-  background-color: transparent;
 }
 
 .incident-popup__close-button:hover {

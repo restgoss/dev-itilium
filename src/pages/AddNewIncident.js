@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion"
 import cross from '../utils/images/cross.svg';
 import { Services } from "../utils/Constants";
 import api from "../utils/Api";
@@ -7,10 +8,12 @@ import error from '../utils/images/error.png';
 import success from '../utils/images/success.png';
 
 function AddNewIncident({ isPopupOpened, setPopupOpened }) {
+
+
     const [selectedServiceLoading, setSelectedServiceLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState(false);
 
-    const [selectedServiceUuid, setSelectedServiceUuid] = useState('');
+    const [selectedService, setSelectedService] = useState('');
     const [selectedServiceComponents, setSelectedServiceComponents] = useState([]);
     const [selectedServiceComponent, setSelectedServiceComponent] = useState('');
     const [step2Error, setStep2Error] = useState('');
@@ -32,7 +35,7 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
         setCurrentStep(0);
         setTopic('');
         setDescription('');
-        setSelectedServiceUuid('');
+        setSelectedService('');
         setSelectedServiceComponents('');
         setSelectedServiceComponent('');
         setPopupOpened(false);
@@ -51,7 +54,7 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
             setSelectedServiceLoading(true);
             try {
                 const token = localStorage.getItem('jwt');
-                const res = await api.fetchServiceComponent(token, selectedServiceUuid);
+                const res = await api.fetchServiceComponent(token, selectedService.ServiceUuid);
                 setSelectedServiceComponents(res.ServiceComponents);
             } catch (error) {
                 console.log(error);
@@ -59,11 +62,11 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
                 setSelectedServiceLoading(false);
             }
         };
-
-        if (selectedServiceUuid) {
+        setSelectedServiceComponent('');
+        if (selectedService) {
             fetchSelectedService();
         }
-    }, [selectedServiceUuid]);
+    }, [selectedService]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -77,7 +80,7 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
                 "MembershipServices": {
                     "UID": `${selectedServiceComponent.ServiceComponentUuid}`,
                     "Service": {
-                        "UID": `${selectedServiceUuid}`
+                        "UID": `${selectedService.ServiceUuid}`
                     }
                 }
             };
@@ -96,7 +99,12 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
     return (
         <>
             <div className={isPopupOpened ? `incident-popup incident-popup_active` : `incident-popup`}>
-                <div className="incident-popup__body">
+                <motion.div
+                    initial={{ height: 0 }}
+                    animate={{ height: 'auto' }}
+                    transition={{ type: 'spring', duration: 0.9 }}
+                    style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', ease: 'easeInOut', overflowY: 'auto', height: 0 }}
+                    className="incident-popup__body">
                     <button src={cross} onClick={() => handleClosePopup()} className="incident-popup__close-button"></button>
                     {currentStep === 0 && (
                         <>
@@ -104,56 +112,53 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
                             <div id="servicesContainer1"
                                 className="incident-popup__services-div">
                                 {Services.map((item) => (
-                                    <div
-                                        className={
-                                            selectedServiceUuid === item.ServiceUuid
-                                                ? `incident-popup__services-item incident-popup__services-item_active`
-                                                : selectedServiceUuid && selectedServiceUuid !== item.ServiceUuid
-                                                    ? `incident-popup__services-item incident-popup__services-item_inactive`
-                                                    : `incident-popup__services-item`
-                                        }
-                                        key={item.ServiceUuid}
-                                        onClick={() => setSelectedServiceUuid(item.ServiceUuid)}
-                                    >
-                                        <p>{item.Service}</p>
-                                    </div>
-
+                                    <>
+                                            <div
+                                                className={
+                                                    selectedService.ServiceUuid === item.ServiceUuid
+                                                        ? `incident-popup__services-item incident-popup__services-item_active`
+                                                        : selectedService.ServiceUuid && selectedService.ServiceUuid !== item.ServiceUuid
+                                                            ? `incident-popup__services-item incident-popup__services-item_inactive`
+                                                            : `incident-popup__services-item`
+                                                }
+                                                key={item.ServiceUuid}
+                                                onClick={() => setSelectedService(item)}
+                                            >
+                                                <p>{item.Service}</p>
+                                            </div>
+                                            <div className={selectedService === item ? "incident-popup__services__layout_active" : "incident-popup__services__layout"}>
+                                                {selectedService === item ? (
+                                                    <>
+                                                        <p className="incident-popup__paragraph">Выберите услугу:</p>
+                                                        <div id="servicesContainer2" className="incident-popup__services-div">
+                                                            {Array.isArray(selectedServiceComponents) ? (
+                                                                selectedServiceComponents.map((item) => (
+                                                                    <div
+                                                                        className={
+                                                                            selectedServiceComponent &&
+                                                                                selectedServiceComponent.ServiceComponentUuid === item.ServiceComponentUuid
+                                                                                ? `incident-popup__services-item incident-popup__services-item_active`
+                                                                                : selectedServiceComponent &&
+                                                                                    selectedServiceComponent.ServiceComponentUuid !== item.ServiceComponentUuid
+                                                                                    ? `incident-popup__services-item incident-popup__services-item_inactive`
+                                                                                    : `incident-popup__services-item`
+                                                                        }
+                                                                        key={item.ServiceComponent}
+                                                                        onClick={() => setSelectedServiceComponent(item)}
+                                                                    >
+                                                                        <p>{item.ServiceComponent}</p>
+                                                                    </div>
+                                                                ))
+                                                            ) : (
+                                                                null
+                                                            )}
+                                                        </div>
+                                                    </>
+                                                ) : null}
+                                            </div>
+                                    </>
                                 ))}
                             </div>
-                            {selectedServiceLoading ? (
-                                <div className="incident-popup__loading">
-                                    <img className="incident-popup__services-loading" src={loading} alt="Loading"></img>
-                                </div>
-                            ) : (
-                                selectedServiceComponents.length > 0 ? (
-                                    <>
-                                        <p className="incident-popup__paragraph">Выберите услугу:</p>
-                                        <div
-                                            id="servicesContainer2"
-                                            className="incident-popup__services-div"
-                                        >
-                                            {selectedServiceComponents.map((item) => (
-                                                <div
-                                                    className={
-                                                        selectedServiceComponent &&
-                                                            selectedServiceComponent.ServiceComponentUuid === item.ServiceComponentUuid
-                                                            ? `incident-popup__services-item incident-popup__services-item_active`
-                                                            : selectedServiceComponent &&
-                                                                selectedServiceComponent.ServiceComponentUuid !== item.ServiceComponentUuid
-                                                                ? `incident-popup__services-item incident-popup__services-item_inactive`
-                                                                : `incident-popup__services-item`
-                                                    }
-                                                    key={item.ServiceComponent}
-                                                    onClick={() => setSelectedServiceComponent(item)}
-                                                >
-                                                    <p>{item.ServiceComponent}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                    </>
-                                ) : null
-                            )}
                             <span className="incident-popup__span-error">{step2Error}</span>
                             <button className="incident-popup__button" onClick={() => {
                                 if (selectedServiceComponent) {
@@ -172,13 +177,14 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
                                     <div className="incident-popup__loading">
                                         <img className="incident-popup__services-loading" src={loading} alt="Loading"></img>
                                     </div>
-
                                 </>) : (
                                     <>
-                                        <p className="incident-popup__paragraph">Выбранная услуга: <span>{selectedServiceComponent.ServiceComponent}</span></p>
                                         <button className="incident-popup__button-back" onClick={handlePrevStep}>&#8249;</button>
+                                        <div className="incident-popup__text-block">
+                                            <p className="incident-popup__paragraph">Выбранная услуга: <span>{selectedService.Service} — {selectedServiceComponent.ServiceComponent}</span></p>
+                                        </div>
+                                        <p className="incident-popup__paragraph" style={{ marginTop: '115px', marginBottom: '15px' }}>Описание:</p>
                                         <form className="incident-popup__form" onSubmit={(e) => handleSubmit(e)}>
-                                            <p className="incident-popup__paragraph">Описание:</p>
                                             <input id="description" placeholder="Описание обращения" onChange={(e) => setDescription(e.target.value)} required></input>
                                             <button className="incident-popup__button">Отправить</button>
                                         </form>
@@ -205,7 +211,7 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
                             )}
                         </>
                     )}
-                </div>
+                </motion.div>
             </div >
         </>
 
