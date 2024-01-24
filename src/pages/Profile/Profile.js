@@ -6,7 +6,9 @@ import AddNewIncident from '../AddNewIncident';
 import Search from '../../components/Search/Search';
 import Sort from '../../components/Sort/Sort';
 import "overlayscrollbars/styles/overlayscrollbars.css";
+import { motion, AnimatePresence } from 'framer-motion'
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
+import IncidentPopup from '../../components/IncidentPopup/IncidentPopup';
 const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
   const [selectedIncidentUuid, setSelectedIncidentUuid] = useState(null);
   const [selectedIncident, setSelectedIncident] = useState(null);
@@ -43,7 +45,7 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
     setIncidentsList(sortedList);
   }, [incidentsList, sortOption]);
 
-  
+
   useEffect(() => {
     const fetchSelectedIncident = async () => {
       try {
@@ -83,23 +85,25 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
             </div>
             <div className='incident-list__body' >
               <OverlayScrollbarsComponent options={{ scrollbars: { autoHide: "leave" } }}>
-                {sortedIncidentsList
-                  .filter((item) => 
-                  (ticketsInProgress && !['Отклонено', 'Не согласовано', 'Закрыто'].includes(item.state)) ||
-                  (!ticketsInProgress)
-                )
-                  .map((incident) => (
-                    <div
-                      key={incident.linkUuid}
-                      className={selectedIncidentUuid && selectedIncidentUuid === incident.linkUuid ? 'incident-list__row incident-list__row_active' : 'incident-list__row'}
-                      onClick={() => setSelectedIncidentUuid(incident.linkUuid)}
-                    >
-                      <div className='incident-list__cell first-column'>{incident.date.split(':').slice(0, -1).join(':')}</div>
-                      <div className='incident-list__cell second-column'>{incident.number.replace(/^0+/, '')}</div>
-                      <div className='incident-list__cell third-column' style={{ display: 'block' }}>{incident.topic}</div>
-                      <div className='incident-list__cell fourth-column' style={{ display: 'block' }}>{incident.state}</div>
-                    </div>
-                  ))}
+                  {sortedIncidentsList
+                    .filter((item) =>
+                      (ticketsInProgress && !['Отклонено', 'Не согласовано', 'Закрыто'].includes(item.state)) ||
+                      (!ticketsInProgress)
+                    )
+                    .map((incident) => (
+
+                      <div
+                        key={incident.number}
+                        className={selectedIncidentUuid && selectedIncidentUuid === incident.linkUuid ? 'incident-list__row incident-list__row_active' : 'incident-list__row'}
+                        onClick={() => setSelectedIncidentUuid(incident.linkUuid)}
+                      >
+                        <div className='incident-list__cell first-column'><p style={{ textAlign: 'center' }}>{incident.date.split(':').slice(0, -1).join(':')}</p></div>
+                        <div className='incident-list__cell second-column'><p style={{ textAlign: 'center' }}>{incident.number.replace(/^0+/, '')}</p></div>
+                        <div className='incident-list__cell third-column' style={{ display: 'block' }}><p style={{ textAlign: 'center' }}>{incident.topic}</p></div>
+                        <div className='incident-list__cell fourth-column' style={{}}><p style={{ textAlign: 'center' }}>{incident.state}</p></div>
+                      </div>
+
+                    ))}
               </OverlayScrollbarsComponent>
             </div>
           </div>
@@ -141,7 +145,7 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
           </div>
         </div>
       </div >
-      <AddNewIncident setPopupOpened={setPopupOpened} isPopupOpened={isPopupOpened} />
+      <IncidentPopup setPopupOpened={setPopupOpened} isPopupOpened={isPopupOpened} />
     </>
   );
 };

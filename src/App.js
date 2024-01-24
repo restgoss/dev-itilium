@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import { AnimatePresence } from 'framer-motion';
 import { Navigate, Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import ProtectedRoute from './utils/ProtectedRoute';
 import Profile from './pages/Profile/Profile';
@@ -95,39 +96,41 @@ function App() {
 
   return (
     <>
-      <div className="App">
-        <Header isLoggedIn={isLoggedIn} onSignOut={onSignOut} setPopupOpened={setPopupOpened} />
-        <Routes>
-          <Route path='/sign-in' element={<Login onSignIn={onSignIn} />} />
-          <Route
-            path='/profile'
-            element={
-              isLoggedIn ? (
-                <ProtectedRoute
-                  isLoggedIn={isLoggedIn}
-                  incidentsList={incidentsList}
-                  isPopupOpened={isPopupOpened}
-                  setPopupOpened={setPopupOpened}
-                  component={Profile}
-                />
-              ) : (
-                <Navigate to='/sign-in' />
-              )
-            }
-          />
+      <AnimatePresence>
+        <div className="App">
+          <Header isLoggedIn={isLoggedIn} onSignOut={onSignOut} setPopupOpened={setPopupOpened} />
+          <Routes>
+            <Route path='/sign-in' element={<Login onSignIn={onSignIn} />} />
+            <Route
+              path='/profile'
+              element={
+                isLoggedIn ? (
+                  <ProtectedRoute
+                    isLoggedIn={isLoggedIn}
+                    incidentsList={incidentsList}
+                    isPopupOpened={isPopupOpened}
+                    setPopupOpened={setPopupOpened}
+                    component={Profile}
+                  />
+                ) : (
+                  <Navigate to='/sign-in' />
+                )
+              }
+            />
 
-          <Route path='/incident-details/:uuid' element={<IncidentDetails />} />
-          <Route
-            path='/status-test'
-            element={isLoggedIn ? <Navigate to='/profile' /> : <Navigate to='/sign-in' />}
-          />
-          <Route
-            path='/add-new-incident'
-            element={<AddNewIncident onSubmit={addNewIncident} />}
-          />
-          <Route path='*' element={isLoggedIn ? <Navigate to='/profile' /> : <Navigate to='/sign-in' />} />
-        </Routes>
-      </div>
+            <Route path='/incident-details/:uuid' element={<IncidentDetails />} />
+            <Route
+              path='/status-test'
+              element={isLoggedIn ? <Navigate to='/profile' /> : <Navigate to='/sign-in' />}
+            />
+            <Route
+              path='/add-new-incident'
+              element={<AddNewIncident onSubmit={addNewIncident} />}
+            />
+            <Route path='*' element={isLoggedIn ? <Navigate to='/profile' /> : <Navigate to='/sign-in' />} />
+          </Routes>
+        </div>
+      </AnimatePresence>
     </>
   );
 }

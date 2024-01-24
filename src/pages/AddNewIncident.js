@@ -8,18 +8,15 @@ import error from '../utils/images/error.png';
 import success from '../utils/images/success.png';
 
 function AddNewIncident({ isPopupOpened, setPopupOpened }) {
-
-
-    const [selectedServiceLoading, setSelectedServiceLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState(false);
-
     const [selectedService, setSelectedService] = useState('');
     const [selectedServiceComponents, setSelectedServiceComponents] = useState([]);
     const [selectedServiceComponent, setSelectedServiceComponent] = useState('');
     const [step2Error, setStep2Error] = useState('');
     const [currentStep, setCurrentStep] = useState(0);
-
     const [isLoading, setIsLoading] = useState(false);
+
+    const newComponentRef = useRef();
 
     const handleNextStep = () => {
         setCurrentStep(currentStep + 1);
@@ -51,7 +48,6 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
 
     useEffect(() => {
         const fetchSelectedService = async () => {
-            setSelectedServiceLoading(true);
             try {
                 const token = localStorage.getItem('jwt');
                 const res = await api.fetchServiceComponent(token, selectedService.ServiceUuid);
@@ -59,7 +55,6 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
             } catch (error) {
                 console.log(error);
             } finally {
-                setSelectedServiceLoading(false);
             }
         };
         setSelectedServiceComponent('');
@@ -99,63 +94,30 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
     return (
         <>
             <div className={isPopupOpened ? `incident-popup incident-popup_active` : `incident-popup`}>
-                <motion.div
-                    initial={{ height: 0 }}
-                    animate={{ height: 'auto' }}
-                    transition={{ type: 'spring', duration: 0.9 }}
-                    style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', ease: 'easeInOut', overflowY: 'auto', height: 0 }}
+                <div
                     className="incident-popup__body">
                     <button src={cross} onClick={() => handleClosePopup()} className="incident-popup__close-button"></button>
                     {currentStep === 0 && (
                         <>
                             <p className="incident-popup__paragraph">С чем вам нужна помощь?</p>
-                            <div id="servicesContainer1"
+                            <div
+                                id="servicesContainer1"
                                 className="incident-popup__services-div">
                                 {Services.map((item) => (
                                     <>
-                                            <div
-                                                className={
-                                                    selectedService.ServiceUuid === item.ServiceUuid
-                                                        ? `incident-popup__services-item incident-popup__services-item_active`
-                                                        : selectedService.ServiceUuid && selectedService.ServiceUuid !== item.ServiceUuid
-                                                            ? `incident-popup__services-item incident-popup__services-item_inactive`
-                                                            : `incident-popup__services-item`
-                                                }
-                                                key={item.ServiceUuid}
-                                                onClick={() => setSelectedService(item)}
-                                            >
-                                                <p>{item.Service}</p>
-                                            </div>
-                                            <div className={selectedService === item ? "incident-popup__services__layout_active" : "incident-popup__services__layout"}>
-                                                {selectedService === item ? (
-                                                    <>
-                                                        <p className="incident-popup__paragraph">Выберите услугу:</p>
-                                                        <div id="servicesContainer2" className="incident-popup__services-div">
-                                                            {Array.isArray(selectedServiceComponents) ? (
-                                                                selectedServiceComponents.map((item) => (
-                                                                    <div
-                                                                        className={
-                                                                            selectedServiceComponent &&
-                                                                                selectedServiceComponent.ServiceComponentUuid === item.ServiceComponentUuid
-                                                                                ? `incident-popup__services-item incident-popup__services-item_active`
-                                                                                : selectedServiceComponent &&
-                                                                                    selectedServiceComponent.ServiceComponentUuid !== item.ServiceComponentUuid
-                                                                                    ? `incident-popup__services-item incident-popup__services-item_inactive`
-                                                                                    : `incident-popup__services-item`
-                                                                        }
-                                                                        key={item.ServiceComponent}
-                                                                        onClick={() => setSelectedServiceComponent(item)}
-                                                                    >
-                                                                        <p>{item.ServiceComponent}</p>
-                                                                    </div>
-                                                                ))
-                                                            ) : (
-                                                                null
-                                                            )}
-                                                        </div>
-                                                    </>
-                                                ) : null}
-                                            </div>
+                                        <div
+                                            className={
+                                                selectedService.ServiceUuid === item.ServiceUuid
+                                                    ? `incident-popup__services-item incident-popup__services-item_active`
+                                                    : selectedService.ServiceUuid && selectedService.ServiceUuid !== item.ServiceUuid
+                                                        ? `incident-popup__services-item incident-popup__services-item_inactive`
+                                                        : `incident-popup__services-item`
+                                            }
+                                            key={item.ServiceUuid}
+                                            onClick={() => setSelectedService(item)}
+                                        >
+                                            <p>{item.Service}</p>
+                                        </div>
                                     </>
                                 ))}
                             </div>
@@ -211,7 +173,7 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
                             )}
                         </>
                     )}
-                </motion.div>
+                </div>
             </div >
         </>
 

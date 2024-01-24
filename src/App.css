@@ -127,7 +127,6 @@ input {
 }
 
 .incident-popup__span-error {
-  text-decoration: underline;
   font-size: 14px;
   font-weight: bold;
   margin: 10px 0 10px 0;
@@ -135,6 +134,8 @@ input {
 }
 
 .incident-popup__body {
+  transition: .3s ease-in-out;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -240,6 +241,7 @@ input {
 }
 
 .incident-popup__services-div {
+  transition: .3s ease-in-out;
   display: flex;
   padding: 20px;
   flex-wrap: wrap;
@@ -247,7 +249,8 @@ input {
 }
 
 .incident-popup__services-item {
-  flex: 1 1 calc(25% - 10px);
+  transition: .3s ease-in-out;
+  flex: 1 1 calc(33% - 10px);
   padding: 0 10px 0 10px;
   display: flex;
   height: 50px;
@@ -264,11 +267,24 @@ input {
   height: 0;
 }
 
+.incident-popup__services-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 10px;
+}
+
 .incident-popup__services__layout_active {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
   width: 100%;
   height: auto;
   background-color: #f3f3f3;
-  padding: 15px 0 15px 0;
+  padding: 15px;
+  max-height: 300px;
+  align-items: center;
+  justify-content: center;
 }
 
 .incident-popup__services-item:hover {
@@ -302,7 +318,8 @@ input {
   background-color: #fff;
   color: #000;
   border: 1px solid #000;
-  border-radius: 6px;  z-index: 1000;
+  border-radius: 6px;
+  z-index: 1000;
   position: absolute;
   right: 15px;
   top: 15px;
@@ -501,6 +518,7 @@ header {
 }
 
 .incident-list__row {
+  position: relative;
   height: 65px;
   display: flex;
   flex-direction: row;
@@ -545,7 +563,8 @@ header {
 }
 
 .incident-list__cell {
-  display: flex;
+  text-align: center;
+  display: block;
   transition: .3s ease-in-out;
   text-align: left;
   text-overflow: ellipsis;
