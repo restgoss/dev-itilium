@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import cross from '../../utils/images/cross.svg';
+import cross from '../../utils/images/white_cross.png';
 import ServiceSelection from './ServiceSelection';
 import api from '../../utils/Api';
 import TypeInStep from './TypeInStep';
@@ -61,10 +61,10 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened }) {
         } catch (error) {
             console.log(error);
         } finally {
-            setCurrentStep(2);
             const token = localStorage.getItem('jwt');
             const iniciatorUuid = localStorage.getItem('currentIniciatorUuid');
             const res = await api.getIncidents(token, iniciatorUuid);
+            handleClosePopup();
         }
     };
 
@@ -104,8 +104,6 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened }) {
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.2, type: 'tween' }}>
                         <motion.div className="incident-popup__body"
-                            animate={{ height: 'auto' }}
-                            transition={{ type: 'tween' }}
                         >
                             <button src={cross} onClick={() => handleClosePopup()} className="incident-popup__close-button"></button>
                             {currentStep === 1 && (

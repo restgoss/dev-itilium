@@ -71,7 +71,7 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
           <div className='incident-list__table'>
             <div className='incident-list__field'>
               <Search />
-              <Sort setSortOption={setSortOption} setTicketsInProgress={setTicketsInProgress} />
+              <Sort key='sort_component' setSortOption={setSortOption} setTicketsInProgress={setTicketsInProgress} />
               <div className='incident-list__add-button' onClick={() => setPopupOpened(true)}>
                 <p className='incident-list__add-button__plus'>+</p>
                 <p className='incident-list__add-button__paragraph'>Новое обращение</p>
@@ -85,13 +85,15 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
             </div>
             <div className='incident-list__body' >
               <OverlayScrollbarsComponent options={{ scrollbars: { autoHide: "leave" } }}>
-                  {sortedIncidentsList
+                {sortedIncidentsList.length === 0 ? (
+                  <p className='incident-info__selectincident'>Обращений в работе нету</p>
+                ) : (
+                  sortedIncidentsList
                     .filter((item) =>
                       (ticketsInProgress && !['Отклонено', 'Не согласовано', 'Закрыто'].includes(item.state)) ||
                       (!ticketsInProgress)
                     )
                     .map((incident) => (
-
                       <div
                         key={incident.number}
                         className={selectedIncidentUuid && selectedIncidentUuid === incident.linkUuid ? 'incident-list__row incident-list__row_active' : 'incident-list__row'}
@@ -102,9 +104,10 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
                         <div className='incident-list__cell third-column' style={{ display: 'block' }}><p style={{ textAlign: 'center' }}>{incident.topic}</p></div>
                         <div className='incident-list__cell fourth-column' style={{}}><p style={{ textAlign: 'center' }}>{incident.state}</p></div>
                       </div>
-
-                    ))}
+                    ))
+                )}
               </OverlayScrollbarsComponent>
+
             </div>
           </div>
           <div className='incident-info__div'>

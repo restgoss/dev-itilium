@@ -96,7 +96,6 @@ function App() {
 
   return (
     <>
-      <AnimatePresence>
         <div className="App">
           <Header isLoggedIn={isLoggedIn} onSignOut={onSignOut} setPopupOpened={setPopupOpened} />
           <Routes>
@@ -130,7 +129,6 @@ function App() {
             <Route path='*' element={isLoggedIn ? <Navigate to='/profile' /> : <Navigate to='/sign-in' />} />
           </Routes>
         </div>
-      </AnimatePresence>
     </>
   );
 }

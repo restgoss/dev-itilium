@@ -25,6 +25,7 @@ const Sort = ({ setSortOption, setTicketsInProgress }) => {
         event.stopPropagation();
         setShowOnlyInProgress(event.target.checked);
         setTicketsInProgress(event.target.checked);
+        setSortOpened(false);
     };
 
     useEffect(() => {
@@ -50,42 +51,48 @@ const Sort = ({ setSortOption, setTicketsInProgress }) => {
 
     return (
         <>
-            <AnimatePresence>
-                <motion.div
-                    initial={{ opacity: 0}}
-                    animate={{ opacity: 1}}
-                    exit={{ opacity: 0}}
-                    transition={{ type: 'tween', duration: 0.3 }}
-                    className='incident-sort__button'
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        setSortOpened((prev) => !prev);
-                    }}
-                >
-                    {isSortOpened ? (
-                        <>
-                            <p>Фильтр</p>
-                            <img src={sort_up} alt='' style={{ width: '12px', height: '12px', marginLeft: '5px' }}></img>
-                        </>
-                    ) : (
-                        <>
-                            <p>Фильтр</p>
-                            <img src={sort_down} alt='' style={{ width: '12px', height: '12px', marginLeft: '5px' }}></img>
-                        </>
-                    )}
-                </motion.div>
+            <motion.div
+                key='sortbutton'
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ type: 'tween', duration: 0.3 }}
 
+                className='incident-sort__button'
+                onClick={(event) => {
+                    event.stopPropagation();
+                    setSortOpened((prev) => !prev);
+                }}
+            >
+                {isSortOpened ? (
+                    <>
+                        <p>Фильтр</p>
+                        <img src={sort_up} alt='' style={{ width: '12px', height: '12px', marginLeft: '5px' }}></img>
+                    </>
+                ) : (
+                    <>
+                        <p>Фильтр</p>
+                        <img src={sort_down} alt='' style={{ width: '12px', height: '12px', marginLeft: '5px' }}></img>
+                    </>
+                )}
+            </motion.div>
+            <AnimatePresence>
                 {isSortOpened && (
+
                     <motion.fieldset
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ type: 'spring', duration: 0.4 }}
-                        className='incident-sort__div'
-                        exitBeforeEnter={false}>
-                        
+                        key='fieldset'
+                        initial={{ height: 0 }}
+                        animate={{ height: 'auto' }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ type: 'tween', duration: .2}}
+                        className='incident-sort__div'>
+
                         {sortOptions.map((optionObj) => (
-                            <div
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0, display: 'none', height: 0 }}
+                                transition={{delay: .1, type: 'spring', duration: .2 }}
                                 key={optionObj.sortOption}
                                 className={`incident-sort__item ${selectedSortOption === optionObj.sortOption ? 'incident-sort__item_active' : ''}`}
                                 onClick={() => handleSortOptionChange(optionObj.sortOption)}
@@ -99,15 +106,20 @@ const Sort = ({ setSortOption, setTicketsInProgress }) => {
                                     onChange={() => handleSortOptionChange(optionObj.sortOption)}
                                 />
                                 <p className="incident-sort__item__paragraph">{optionObj.sortDescription}</p>
-                            </div>
+                            </motion.div>
                         ))}
-                        <div className="incident-sort__item" onClick={(event) => event.stopPropagation()}>
+                        <motion.div 
+                        initial={{ opacity: 0, visibility: 'none' }}
+                        animate={{ opacity: 1, visibility: 'visible' }}
+                        exit={{ opacity: 0, display: 'none'}}
+                        transition={{ delay: .1, type: 'spring'}}
+                        className="incident-sort__item" onClick={(event) => event.stopPropagation()}>
                             <p className="incident-sort__item__paragraph">Отображать заявки только в работе</p>
                             <label className="switch">
                                 <input type="checkbox" onChange={handleCheckboxChange} checked={showOnlyInProgress} />
                                 <span className="slider round"></span>
                             </label>
-                        </div>
+                        </motion.div>
                     </motion.fieldset>
 
                 )}

@@ -83,12 +83,12 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
         } catch (error) {
             console.log(error);
         } finally {
-            setCurrentStep(2);
             setIsLoading(false);
             setSuccessMessage(true);
             const token = localStorage.getItem('jwt');
             const iniciatorUuid = localStorage.getItem('currentIniciatorUuid');
             const res = await api.getIncidents(token, iniciatorUuid);
+            handleClosePopup();
         }
     };
     return (

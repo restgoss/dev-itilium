@@ -6,7 +6,7 @@ export default function Search() {
     return(
         <>
             <div className="incident-list__search__div">
-                <input className="incident-list__search__input" onChange={(e) => setInputValue(e.target.value)} placeholder='Поиск'></input>
+                <input className="incident-list__search__input" onChange={(e) => setInputValue(e.target.value)} placeholder='Поиск' disabled></input>
                 <img className='incident-list__search__image'></img>
             </div>
         </>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Services } from "../../utils/Constants"
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import api from '../../utils/Api';
 import ServiceItem from './ServiceItem';
 import ServiceRow from './ServiceRow';
@@ -8,7 +8,7 @@ import ServiceRow from './ServiceRow';
 export default function ServiceSelection({ setSelectedService, setSelectedComponent, selectedService, selectedComponent, componentList, setComponentList, componentIsLoading }) {
 
     useEffect(() => {
-       
+
         const fetchSelectedServiceComponents = async () => {
             try {
                 const token = localStorage.getItem('jwt');
@@ -32,29 +32,31 @@ export default function ServiceSelection({ setSelectedService, setSelectedCompon
 
     return (
         <>
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="incident-popup__services-div"
-                id="servicesContainer1"
-            >
-                {groupedIncidents.map((group, index) => (
-                    <ServiceRow
-                        group={group}
-                        setSelectedService={setSelectedService}
-                        selectedService={selectedService}
-                        setSelectedComponent={setSelectedComponent}
-                        selectedComponent={selectedComponent}
-                        componentList={componentList} 
-                        componentIsLoading={componentIsLoading}
-                        key={index}
+            <AnimatePresence initial={false}>
+                <motion.div
+                    initial={{ height: 0 }}
+                    animate={{ height: 'auto' }}
+                    exit={{ height: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="incident-popup__services-div"
+                    id="servicesContainer1"
+                >
+                    {groupedIncidents.map((group, index) => (
+                        <ServiceRow
+                            group={group}
+                            setSelectedService={setSelectedService}
+                            selectedService={selectedService}
+                            setSelectedComponent={setSelectedComponent}
+                            selectedComponent={selectedComponent}
+                            componentList={componentList}
+                            componentIsLoading={componentIsLoading}
+                            key={index}
                         />
-                        
-                ))}
 
-            </motion.div>
+                    ))}
+
+                </motion.div>
+            </AnimatePresence>
         </>
     )
 }

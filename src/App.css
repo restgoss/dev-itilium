@@ -151,13 +151,12 @@ input {
 .incident-popup__text-block {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   width: 80%;
 }
 
 .incident-popup__paragraph {
   font-weight: bold;
-  margin: 0;
+  margin: 0 0 15px 0;
 }
 
 .incident-popup__paragraph span {
@@ -177,7 +176,7 @@ input {
 }
 
 .incident-popup__button-back {
-  width: 30px;
+  font-size: 20px;
   height: 30px;
   background-color: #fff;
   color: #000;
@@ -186,8 +185,12 @@ input {
   position: absolute;
   left: 15px;
   top: 15px;
-  font-size: 20px;
-  padding: 0;
+  padding: 0 0 0 5px;
+}
+
+.incident-popup__button-back span {
+  margin: 0 5px 0 5px;
+  font-size: 14px;
 }
 
 .incident-popup__form button {
@@ -275,13 +278,16 @@ input {
 }
 
 .incident-popup__services__layout_active {
+  /* -webkit-box-shadow: 0px 0px 17px -3px rgba(34, 60, 80, 0.2) inset;
+  -moz-box-shadow: 0px 0px 17px -3px rgba(34, 60, 80, 0.2) inset;
+  box-shadow: 0px 0px 17px -3px rgba(34, 60, 80, 0.2) inset; */
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
   width: 100%;
   height: auto;
   background-color: #f3f3f3;
-  padding: 15px;
+  padding: 20px;
   max-height: 300px;
   align-items: center;
   justify-content: center;
@@ -304,8 +310,8 @@ input {
 
 .incident-popup__services-loading {
   padding: 20px;
-  width: 25px;
-  height: 25px;
+  width: 45px;
+  height: 45px;
 }
 
 .incident-popup__services-item p {
@@ -315,16 +321,16 @@ input {
 .incident-popup__close-button {
   width: 30px;
   height: 30px;
-  background-color: #fff;
-  color: #000;
+  background-color: #000;
+  color: #fff;
   border: 1px solid #000;
   border-radius: 6px;
   z-index: 1000;
   position: absolute;
   right: 15px;
   top: 15px;
-  background-size: 20px 20px;
-  background-image: url('./utils/images/cross.svg');
+  background-size: 30px 30px;
+  background-image: url('./utils/images/white_cross.png');
   background-position: center;
   background-repeat: no-repeat;
 }
@@ -663,12 +669,12 @@ header {
 }
 
 .incident-info__loading {
-  width: 25px;
-  height: 25px;
+  width: 45px;
+  height: 45px;
 }
 
 .incident-info__selectincident {
-  margin-top: 60px;
+  margin-top: -60px;
 }
 
 @media screen and (max-width: 767px) {}
@@ -678,7 +684,7 @@ header {
 @media screen and (max-width: 1279px) {
 
   .incident-info__selectincident {
-    margin: 0;
+    margin-top: -100px;
   }
 
   .incident-list__add-button {
