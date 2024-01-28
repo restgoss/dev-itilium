@@ -38,7 +38,7 @@ export default function ServiceRow({
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0, display: 'none' }}
-                    transition={{ type: 'tween', ease: 'linear', duration: .4 }}
+                    transition={{ type: 'tween', ease: 'easeInOut', duration: .4 }}
                     className='incident-popup__services__layout_active'
                 >
                     <img className="incident-popup__services-loading" src={loading} alt='' />

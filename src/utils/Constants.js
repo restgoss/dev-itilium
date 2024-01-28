@@ -3,7 +3,7 @@ export const Services = [
         "Service": "1С",
         "ServiceUuid": "85e195dd-7e13-11ee-90a2-0050569f9f23",
         "ServiceCode": "0000000085"
-        },
+    },
     {
         "Service": "Банки-клиенты | СБИС",
         "ServiceUuid": "85e1969d-7e13-11ee-90a2-0050569f9f23",
@@ -45,6 +45,11 @@ export const Services = [
         "ServiceCode": "0000000095"
     },
     {
+        "Service": "Ревит (Autodesk Revit)",
+        "ServiceUuid": "5382048d-bc37-11ee-90a8-0050569f9f23",
+        "ServiceCode": "0000000100"
+    },
+    {
         "Service": "СБ",
         "ServiceUuid": "85e1956f-7e13-11ee-90a2-0050569f9f23",
         "ServiceCode": "0000000074"
@@ -60,7 +65,7 @@ export const Services = [
         "ServiceCode": "0000000076"
     },
     {
-        "Service": "Файловые ресурсы | Порталы | Системы",
+        "Service": "Файловые ресурсы | Порталы",
         "ServiceUuid": "85e1966c-7e13-11ee-90a2-0050569f9f23",
         "ServiceCode": "0000000087"
     },

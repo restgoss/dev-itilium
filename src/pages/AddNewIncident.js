@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 import cross from '../utils/images/cross.svg';
 import { Services } from "../utils/Constants";
 import api from "../utils/Api";
@@ -15,8 +15,6 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
     const [step2Error, setStep2Error] = useState('');
     const [currentStep, setCurrentStep] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
-
-    const newComponentRef = useRef();
 
     const handleNextStep = () => {
         setCurrentStep(currentStep + 1);
@@ -45,6 +43,22 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
         }
     }, [selectedServiceComponent]);
 
+    useEffect(() => {
+        const handleOverlayClick = (event) => {
+            const div = document.querySelector('.incident-popup_active');
+            if (div && !div.contains(event.target)) {
+                setPopupOpened(false);
+            }
+        };
+        if (isPopupOpened) {
+            document.addEventListener('click', handleOverlayClick);
+        } else {
+            document.removeEventListener('click', handleOverlayClick);
+        }
+        return () => {
+            document.removeEventListener('click', handleOverlayClick);
+        };
+    }, [isPopupOpened]);
 
     useEffect(() => {
         const fetchSelectedService = async () => {
@@ -93,88 +107,94 @@ function AddNewIncident({ isPopupOpened, setPopupOpened }) {
     };
     return (
         <>
-            <div className={isPopupOpened ? `incident-popup incident-popup_active` : `incident-popup`}>
-                <div
-                    className="incident-popup__body">
-                    <button src={cross} onClick={() => handleClosePopup()} className="incident-popup__close-button"></button>
-                    {currentStep === 0 && (
-                        <>
-                            <p className="incident-popup__paragraph">С чем вам нужна помощь?</p>
-                            <div
-                                id="servicesContainer1"
-                                className="incident-popup__services-div">
-                                {Services.map((item) => (
-                                    <>
-                                        <div
-                                            className={
-                                                selectedService.ServiceUuid === item.ServiceUuid
-                                                    ? `incident-popup__services-item incident-popup__services-item_active`
-                                                    : selectedService.ServiceUuid && selectedService.ServiceUuid !== item.ServiceUuid
-                                                        ? `incident-popup__services-item incident-popup__services-item_inactive`
-                                                        : `incident-popup__services-item`
-                                            }
-                                            key={item.ServiceUuid}
-                                            onClick={() => setSelectedService(item)}
-                                        >
-                                            <p>{item.Service}</p>
+            <AnimatePresence>
+                <div className={isPopupOpened ? `incident-popup incident-popup_active` : `incident-popup`}>
+                    <motion.div
+                        key='incident-layout'
+                        animate={{ height: 'auto' }}
+                        className="incident-popup__body">
+                        <button src={cross} onClick={() => handleClosePopup()} className="incident-popup__close-button"></button>
+                        {currentStep === 0 && (
+                            <>
+                                <p className="incident-popup__paragraph">С чем Вам нужна помощь?</p>
+                                <motion.div
+                                key='service-container'
+                                    animate={{ height: 'auto' }}
+                                    id="servicesContainer1"
+                                    className="incident-popup__services-div">
+                                    {Services.map((item) => (
+                                        <>
+                                            <div
+                                                className={
+                                                    selectedService.ServiceUuid === item.ServiceUuid
+                                                        ? `incident-popup__services-item incident-popup__services-item_active`
+                                                        : selectedService.ServiceUuid && selectedService.ServiceUuid !== item.ServiceUuid
+                                                            ? `incident-popup__services-item incident-popup__services-item_inactive`
+                                                            : `incident-popup__services-item`
+                                                }
+                                                key={item.ServiceUuid}
+                                                onClick={() => setSelectedService(item)}
+                                            >
+                                                <p>{item.Service}</p>
+                                            </div>
+                                        </>
+                                    ))}
+                                </motion.div>
+                                <span className="incident-popup__span-error">{step2Error}</span>
+                                <button className="incident-popup__button" onClick={() => {
+                                    if (selectedServiceComponent) {
+                                        setStep2Error('');
+                                        handleNextStep();
+                                    } else {
+                                        setStep2Error('Выберите услугу');
+                                    }
+                                }}> Далее</button>
+                            </>
+                        )}
+                        {currentStep === 1 && (
+                            <>
+                                {isLoading ?
+                                    (<>
+                                        <div className="incident-popup__loading">
+                                            <img className="incident-popup__services-loading" src={loading} alt="Loading"></img>
                                         </div>
+                                    </>) : (
+                                        <>
+                                            <button className="incident-popup__button-back" onClick={handlePrevStep}>&#8249;</button>
+                                            <div className="incident-popup__text-block">
+                                                <p className="incident-popup__paragraph">Выбранная услуга: <span>{selectedService.Service} — {selectedServiceComponent.ServiceComponent}</span></p>
+                                            </div>
+                                            <p className="incident-popup__paragraph" style={{ marginTop: '115px', marginBottom: '15px' }}>Описание:</p>
+                                            <form className="incident-popup__form" onSubmit={(e) => handleSubmit(e)}>
+                                                <input id="description" placeholder="Описание обращения" onChange={(e) => setDescription(e.target.value)} required></input>
+                                                <button className="incident-popup__button">Отправить</button>
+                                            </form>
+                                        </>
+                                    )}
+
+                            </>
+                        )}
+                        {currentStep === 2 && (
+                            <>
+                                {successMessage ? (
+                                    <>
+                                        <img className="incident-popup__img" src={success} alt=""></img>
+                                        <p className="incident-popup__success">Обращение успешно зарегистрировано!</p>
+                                        <button className="incident-popup__button" onClick={handleClosePopup}>На главную</button>
                                     </>
-                                ))}
-                            </div>
-                            <span className="incident-popup__span-error">{step2Error}</span>
-                            <button className="incident-popup__button" onClick={() => {
-                                if (selectedServiceComponent) {
-                                    setStep2Error('');
-                                    handleNextStep();
-                                } else {
-                                    setStep2Error('Выберите услугу');
-                                }
-                            }}> Далее</button>
-                        </>
-                    )}
-                    {currentStep === 1 && (
-                        <>
-                            {isLoading ?
-                                (<>
-                                    <div className="incident-popup__loading">
-                                        <img className="incident-popup__services-loading" src={loading} alt="Loading"></img>
-                                    </div>
-                                </>) : (
+                                ) : (
                                     <>
-                                        <button className="incident-popup__button-back" onClick={handlePrevStep}>&#8249;</button>
-                                        <div className="incident-popup__text-block">
-                                            <p className="incident-popup__paragraph">Выбранная услуга: <span>{selectedService.Service} — {selectedServiceComponent.ServiceComponent}</span></p>
-                                        </div>
-                                        <p className="incident-popup__paragraph" style={{ marginTop: '115px', marginBottom: '15px' }}>Описание:</p>
-                                        <form className="incident-popup__form" onSubmit={(e) => handleSubmit(e)}>
-                                            <input id="description" placeholder="Описание обращения" onChange={(e) => setDescription(e.target.value)} required></input>
-                                            <button className="incident-popup__button">Отправить</button>
-                                        </form>
+                                        <img className="incident-popup__img" src={error} alt=""></img>
+                                        <p className="incident-popup__success">Произошла ошибка.</p>
+                                        <p className="incident-popup__success">Ваше обращение не было зарегистрировано, попробуйте позже.</p>
+                                        <button className="incident-popup__button" onClick={handleClosePopup}>На главную</button>
                                     </>
                                 )}
-
-                        </>
-                    )}
-                    {currentStep === 2 && (
-                        <>
-                            {successMessage ? (
-                                <>
-                                    <img className="incident-popup__img" src={success} alt=""></img>
-                                    <p className="incident-popup__success">Обращение успешно зарегистрировано!</p>
-                                    <button className="incident-popup__button" onClick={handleClosePopup}>На главную</button>
-                                </>
-                            ) : (
-                                <>
-                                    <img className="incident-popup__img" src={error} alt=""></img>
-                                    <p className="incident-popup__success">Произошла ошибка.</p>
-                                    <p className="incident-popup__success">Ваше обращение не было зарегистрировано, попробуйте позже.</p>
-                                    <button className="incident-popup__button" onClick={handleClosePopup}>На главную</button>
-                                </>
-                            )}
-                        </>
-                    )}
+                            </>
+                        )}
+                    </motion.div>
                 </div>
-            </div >
+            </AnimatePresence>
         </>
 
     )

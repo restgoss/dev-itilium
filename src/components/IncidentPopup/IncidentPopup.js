@@ -4,11 +4,12 @@ import cross from '../../utils/images/white_cross.png';
 import ServiceSelection from './ServiceSelection';
 import api from '../../utils/Api';
 import TypeInStep from './TypeInStep';
+import Result from './Result.js';
 export default function IncidentPopup({ isPopupOpened, setPopupOpened }) {
 
     const [componentIsLoading, setComponentLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
-
+    const [success, setSuccess] = useState(false);
     const [currentStep, setCurrentStep] = useState(1);
 
     const [selectedService, setSelectedService] = useState(null);
@@ -26,6 +27,9 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened }) {
     };
 
     const handlePrevStep = () => {
+        if (selectedComponent) {
+            setSelectedComponent(selectedComponent);
+        }
         setCurrentStep(currentStep - 1);
     };
 
@@ -59,12 +63,11 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened }) {
             };
             const res = await api.addNewIncident(token, body);
         } catch (error) {
+            setSuccess(false);
             console.log(error);
         } finally {
-            const token = localStorage.getItem('jwt');
-            const iniciatorUuid = localStorage.getItem('currentIniciatorUuid');
-            const res = await api.getIncidents(token, iniciatorUuid);
-            handleClosePopup();
+            setSuccess(true);
+            setCurrentStep(3);
         }
     };
 
@@ -103,12 +106,18 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened }) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.2, type: 'tween' }}>
-                        <motion.div className="incident-popup__body"
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.4 }}
+                            key='incbodyanimatekey'
+                            className="incident-popup__body"
                         >
                             <button src={cross} onClick={() => handleClosePopup()} className="incident-popup__close-button"></button>
                             {currentStep === 1 && (
                                 <>
-                                <p className="incident-popup__paragraph">С чем вам нужна помощь?</p>
+                                    <p className="incident-popup__paragraph">С чем вам нужна помощь?</p>
                                     <ServiceSelection
                                         selectedService={selectedService}
                                         selectedComponent={selectedComponent}
@@ -144,6 +153,15 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened }) {
                                         selectedComponent={selectedComponent}
                                         handleSubmit={handleSubmit}
                                     />
+                                </>
+                            )}
+
+                            {currentStep === 3 && (
+                                <>
+                                    <Result
+                                        success={success}
+                                    />
+                                    <button className="incident-popup__button" onClick={handleClosePopup}>На главную</button>
                                 </>
                             )}
                         </motion.div>

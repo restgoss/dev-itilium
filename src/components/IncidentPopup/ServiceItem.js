@@ -9,7 +9,13 @@ export default function ServiceItem({ selectFunction, item, selectedItem }) {
                         : `incident-popup__services-item`}
                 key={item.ServiceUuid}
                 id={item.ServiceUuid}
-                onClick={() => selectFunction(item)}
+                onClick={() => {
+                    if (selectedItem === item) {
+                        selectFunction(null);
+                    } else {
+                        selectFunction(item);
+                    }
+                }}
             >
                 <p>{item.Service}</p>
             </div>

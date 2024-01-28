@@ -73,8 +73,8 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
               <Search />
               <Sort key='sort_component' setSortOption={setSortOption} setTicketsInProgress={setTicketsInProgress} />
               <div className='incident-list__add-button' onClick={() => setPopupOpened(true)}>
+                <p className='incident-list__add-button__paragraph'>Создать</p>
                 <p className='incident-list__add-button__plus'>+</p>
-                <p className='incident-list__add-button__paragraph'>Новое обращение</p>
               </div>
             </div>
             <div className='incident-list__header'>
@@ -123,17 +123,19 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
                         {selectedIncident.number}
                       </div>
                       <div className='incident-info__second-cell'>
-                        <span>Дата: </span>
+                        <span>От: </span>
                         {selectedIncident.date}
                       </div>
                     </div>
-                    <div className='incident-info__text-block'>
-                      <p className='incident-info__topic'>
-                        <span>Тема: </span>
-                        <p>{selectedIncident.topic}</p>
-                      </p>
-                      <p className='incident-info__topic'><span>Описание:</span></p>
-                      <p className='incident-info__description'> {selectedIncident.description}</p>
+                    <div className='incident-info__text-div'>
+                      <div className='incident-info__text-block'>
+                        <p className='incident-info__topic'>
+                          <span>Тема: </span>
+                          <p>{selectedIncident.topic}</p>
+                        </p>
+                        <p className='incident-info__topic' style={{ marginTop: '20px' }}><span>Описание:</span></p>
+                        <p className='incident-info__description'> {selectedIncident.description}</p>
+                      </div>
                       <p className='incident-info__curator'>
                         <span>Статус: </span>
                         {selectedIncident.state}

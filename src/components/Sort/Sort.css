@@ -15,7 +15,6 @@ fieldset {
     height: 35px;
     user-select: none;
     font-size: 14px;
-    margin: 0 15px 0 15px;
 }
 
 .incident-sort__button:hover {
@@ -30,8 +29,6 @@ fieldset {
     position: absolute;
     top: 65px;
     left: 45%;
-    margin: 0 15px 0 15px;
-    margin-bottom: -200px;
     font-size: 14px;
     font-family: 'Circe';
     font-weight: normal;
@@ -59,6 +56,15 @@ fieldset {
     transition: .3s ease-in-out;
 }
 
+
+.incident-sort__item:last-of-type {
+    margin-top: 10px;
+    border-top: 1px solid #d9d9d9;
+    align-self: center;
+    padding-left: 0;
+    justify-content: space-evenly;
+}
+
 .incident-sort__item:hover {
     background-color: #d9d9d9;
     cursor: pointer;
@@ -84,8 +90,8 @@ fieldset {
     margin-left: 15px;
     position: relative;
     display: inline-block;
-    width: 25px;
-    height: 12px;
+    width: 28px;
+    height: 15px;
 }
 
 .switch input {
@@ -109,8 +115,8 @@ fieldset {
 .slider:before {
     position: absolute;
     content: "";
-    height: 10px;
-    width: 10px;
+    height: 13px;
+    width: 13px;
     left: 1px;
     bottom: 1px;
     background-color: rgb(255, 255, 255);
