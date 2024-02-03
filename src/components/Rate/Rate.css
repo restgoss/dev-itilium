@@ -1,0 +1,12 @@
+.rate__stars__div {
+}
+
+.rate__star {
+    opacity: .7;
+    margin-right: 2px;
+    width: 25px;
+}
+
+.rate__star:hover {
+    cursor: pointer;
+}

@@ -61,7 +61,7 @@ button:hover {
 
 
 input {
-  padding: 15px;
+  padding: 10px;
   width: 250px;
   margin-bottom: 25px;
   border: 1px solid #d9d9d9;
@@ -113,11 +113,20 @@ input {
 
 .incident-popup {
   display: none;
-  width: 100%;
+  width: 100vw;
   height: 100%;
   background-color: rgba(0, 0, 0, .4);
   z-index: 999;
 }
+
+.incident-popup__textarea {
+  resize: none;
+  padding: 10px;
+  width: 80%;
+  font-family: inherit;
+  font-size: 14px;
+}
+
 
 .incident-popup_active {
   display: flex;
@@ -142,7 +151,7 @@ input {
   align-items: center;
   padding: 30px 0 30px;
   position: relative;
-  width: 60%;
+  width: 80%;
   max-width: 1024px;
   background-color: #fff;
   border: 1px solid #d9d9d9;
@@ -258,14 +267,26 @@ input {
 .incident-popup__services-item {
   transition: .3s ease-in-out;
   flex: 1 1 calc(33% - 10px);
-  padding: 0 10px 0 10px;
+  padding: 5px 10px;
   display: flex;
+  position: relative;
   height: 50px;
   border: 1px solid #d9d9d9;
   background-color: #fff;
   align-items: center;
   justify-content: center;
+  transition: .2s ease-in-out;
   user-select: none;
+}
+
+.incident-popup__services-item p {
+  max-width: 240px;
+}
+
+.incident-popup__services-item__image {
+  position: absolute;
+  left: 15px;
+  width: 25px;
 }
 
 .incident-popup__services__layout {
@@ -282,9 +303,7 @@ input {
 }
 
 .incident-popup__services__layout_active {
-  /* -webkit-box-shadow: 0px 0px 17px -3px rgba(34, 60, 80, 0.2) inset;
-  -moz-box-shadow: 0px 0px 17px -3px rgba(34, 60, 80, 0.2) inset;
-  box-shadow: 0px 0px 17px -3px rgba(34, 60, 80, 0.2) inset; */
+  overflow: hidden;
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
@@ -292,7 +311,6 @@ input {
   height: auto;
   background-color: #f3f3f3;
   padding: 20px;
-  max-height: 300px;
   align-items: center;
   justify-content: center;
 }
@@ -358,11 +376,12 @@ input {
 }
 
 .form {
-  padding: 30px;
+  font-size: 16px;
+  padding: 20px 0 20px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 512px;
+  width: 450px;
   border: 1px solid #d9d9d9;
   margin-top: 200px;
   border-radius: 8px;
@@ -381,9 +400,13 @@ input {
 .form input {
   font-family: 'Circe';
   font-weight: normal;
-  font-size: 16px;
+  font-size: 14px;
   border-radius: 6px;
-  width: 400px;
+  width: 350px;
+}
+
+.form input:last-of-type {
+  margin: 0 0 10px 0;
 }
 
 .form input:focus {
@@ -392,15 +415,15 @@ input {
 
 .form button {
   font-family: inherit;
-  font-size: 16px;
+  font-size: 14px;
   border: none;
   background-color: #000;
   color: #fff;
-  width: 431px;
+  width: 125px;
   height: 50px;
   border-radius: 6px;
   font-weight: bold;
-  margin: 20px 0 20px 0;
+  margin: 10px 0 10px 0;
   transition: .3s ease-in-out;
 }
 
@@ -490,32 +513,44 @@ header {
 
 .incident-list__header {
   height: 50px;
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 2fr 1fr 3fr 2fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
   font-weight: bold;
   border-bottom: 1px solid #d9d9d9;
   position: sticky;
   top: 0;
   background-color: #fff;
   z-index: 1;
+  justify-items: center;
   align-items: center;
-  border-radius: 6px 0 0 0;
 }
 
-.incident-list__header #first-column {
-  width: 20%;
+.incident-list__header__cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  user-select: none;
+  width: 100%;
+  height: 100%;
 }
 
-.incident-list__header #second-column {
-  width: 10%;
+.incident-list__header__cell:hover {
+  cursor: pointer;
 }
 
-.incident-list__header #third-column {
-  width: 50%;
+
+.incident-list__header__cell p {
+  margin: 0;
 }
 
-.incident-list__header #fourth-column {
-  width: 20%;
+
+.incident-list__header__arrow {
+  margin-left: 5px;
+  width: 12px;
 }
 
 .incident-list__body {
@@ -529,14 +564,26 @@ header {
 
 .incident-list__row {
   position: relative;
-  height: 65px;
-  display: flex;
-  flex-direction: row;
+  min-height: 65px;
+  max-height: 65px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 3fr 2fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
   align-items: center;
   border-bottom: 1px solid #d9d9d9;
   transition: .3s ease-in-out;
   user-select: none;
   width: 100%;
+}
+
+.incident-list__row__p {
+  margin: 0;
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .incident-list__row_active {
@@ -552,26 +599,6 @@ header {
 
 .incident-list__row_active:hover {
   background-color: #d9d9d9;
-}
-
-/* .incident-list__row:last-of-type {
-  border-bottom: none;
-} */
-
-.first-column {
-  width: 20%;
-}
-
-.second-column {
-  width: 10%;
-}
-
-.third-column {
-  width: 50%;
-}
-
-.fourth-column {
-  width: 20%;
 }
 
 .incident-list__header .incident-list__cell:hover {
@@ -592,6 +619,7 @@ header {
 }
 
 .incident-info__div {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -601,7 +629,8 @@ header {
 
 .incident-info__header {
   width: 100%;
-  height: 65px;
+  height: 66px;
+  min-height: 66px;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
@@ -640,18 +669,20 @@ header {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 67px);
+  max-height: 768px;
 }
 
 .incident-info__text-div {
-  min-height: 50%;
+  display: flex;
+  flex-direction: column;
+  height: auto;
 }
 
 .incident-info__text-block {
   display: flex;
-  padding: 30px;
+  padding: 20px 30px;
   flex-direction: column;
-  min-height: 50%;
 }
 
 .incident-info__topic {
@@ -661,21 +692,40 @@ header {
 
 .incident-info__topic span {
   font-weight: bold;
+
+}
+
+.incident-info__topic p {
+  margin: 10px 0 0 0;
 }
 
 .incident-info__description {
   max-height: 140px;
-  overflow-y: auto;
-  margin: 20px 0 0 0;
+  overflow: hidden;
+  margin: 10px 0 0 0;
   text-align: left;
 }
 
 .incident-info__curator {
+  height: 62px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
   margin: 0;
   text-align: left;
-  padding: 20px 30px;
+  padding: 0 30px;
   border-top: 1px solid #d9d9d9;
   border-bottom: 1px solid #d9d9d9;
+}
+
+.incident-info__status {
+  display: flex;
+  flex-direction: row;
+}
+
+.incident-info__status__p {
+  margin: 0 0 0 5px;
 }
 
 .incident-info__curator span {

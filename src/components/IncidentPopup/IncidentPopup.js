@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
 import cross from '../../utils/images/white_cross.png';
 import ServiceSelection from './ServiceSelection';
 import api from '../../utils/Api';
 import TypeInStep from './TypeInStep';
 import Result from './Result.js';
+import { useNavigate } from 'react-router-dom';
 export default function IncidentPopup({ isPopupOpened, setPopupOpened }) {
 
     const [componentIsLoading, setComponentLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
     const [success, setSuccess] = useState(false);
     const [currentStep, setCurrentStep] = useState(1);
-
+    const [isLoading, setLoading] = useState(false);
     const [selectedService, setSelectedService] = useState(null);
 
     const [componentList, setComponentList] = useState([]);
@@ -21,7 +22,7 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened }) {
     const [topic, setTopic] = useState(null);
     const [description, setDescription] = useState(null);
 
-
+    const navigate = useNavigate();
     const handleNextStep = () => {
         setCurrentStep(currentStep + 1);
     };
@@ -43,11 +44,14 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened }) {
         setErrorMessage(null);
         setCurrentStep(1);
         setComponentLoading(false);
+        setLoading(false);
         setComponentList(null);
+        navigate('/profile');
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const token = localStorage.getItem('jwt');
             const body = {
@@ -64,8 +68,10 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened }) {
             const res = await api.addNewIncident(token, body);
         } catch (error) {
             setSuccess(false);
+            setLoading(false);
             console.log(error);
         } finally {
+            setLoading(false);
             setSuccess(true);
             setCurrentStep(3);
         }
@@ -105,19 +111,19 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened }) {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2, type: 'tween' }}>
+                        transition={{ duration: .3, type: 'tween' }}>
                         <motion.div
                             initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
+                            animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0 }}
-                            transition={{ duration: 0.4 }}
+                            transition={{ duration: .3 , type: 'tween'}}
                             key='incbodyanimatekey'
                             className="incident-popup__body"
                         >
                             <button src={cross} onClick={() => handleClosePopup()} className="incident-popup__close-button"></button>
                             {currentStep === 1 && (
                                 <>
-                                    <p className="incident-popup__paragraph">С чем вам нужна помощь?</p>
+                                    <p className="incident-popup__paragraph">С чем Вам нужна помощь?</p>
                                     <ServiceSelection
                                         selectedService={selectedService}
                                         selectedComponent={selectedComponent}
@@ -146,13 +152,15 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened }) {
 
                             {currentStep === 2 && (
                                 <>
-                                    <TypeInStep
-                                        setDescription={setDescription}
-                                        handlePrevStep={handlePrevStep}
-                                        selectedService={selectedService}
-                                        selectedComponent={selectedComponent}
-                                        handleSubmit={handleSubmit}
-                                    />
+                                        <TypeInStep
+                                            setDescription={setDescription}
+                                            description={description}
+                                            handlePrevStep={handlePrevStep}
+                                            selectedService={selectedService}
+                                            selectedComponent={selectedComponent}
+                                            handleSubmit={handleSubmit}
+                                            isLoading={isLoading}
+                                        />
                                 </>
                             )}
 

@@ -17,6 +17,7 @@ export default function ServiceItem({ selectFunction, item, selectedItem }) {
                     }
                 }}
             >
+                <img src={item.image} alt='' className="incident-popup__services-item__image"></img>
                 <p>{item.Service}</p>
             </div>
         </>

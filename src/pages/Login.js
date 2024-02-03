@@ -8,13 +8,14 @@ function Login({ onSignIn }) {
     e.preventDefault();
     onSignIn({ username, password })
   }
-  
+
 
   return (
     <>
       <form className="form" onSubmit={(e) => submitForm(e)}>
         <p className="form_p">Логин</p>
         <input
+          id="username"
           type="text"
           placeholder="Введите логин"
           value={username}
@@ -22,17 +23,13 @@ function Login({ onSignIn }) {
           required />
         <p className="form_p">Пароль</p>
         <input
-            type={showPassword ? 'text' : 'password'}
-            placeholder="Введите пароль"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          {/* <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            style={{ marginLeft: '5px' }}
-          ></button> */}
+          id="password"
+          type={showPassword ? 'text' : 'password'}
+          placeholder="Введите пароль"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <button type="submit" className="form__showpass">Войти</button>
       </form>
     </>

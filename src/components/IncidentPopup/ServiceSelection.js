@@ -8,7 +8,6 @@ import ServiceRow from './ServiceRow';
 export default function ServiceSelection({ setSelectedService, setSelectedComponent, selectedService, selectedComponent, componentList, setComponentList, componentIsLoading }) {
 
     useEffect(() => {
-
         const fetchSelectedServiceComponents = async () => {
             try {
                 const token = localStorage.getItem('jwt');
@@ -35,9 +34,9 @@ export default function ServiceSelection({ setSelectedService, setSelectedCompon
             <AnimatePresence initial={false}>
                 <motion.div
                     initial={{ height: 0 }}
-                    animate={{ height: 'auto' }}
+                    animate={{ height: 'auto', gap: '15px' }}
                     exit={{ height: 0 }}
-                    transition={{ duration: 0.4 }}
+                    transition={{ duration: .3 }}
                     className="incident-popup__services-div"
                     id="servicesContainer1"
                 >

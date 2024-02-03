@@ -4,9 +4,9 @@ import sort_up from '../../utils/images/sort-up.png';
 import sort_down from '../../utils/images/sort-down.png';
 import './Sort.css';
 
-const Sort = ({ setSortOption, setTicketsInProgress }) => {
+const Sort = ({ setSortOption, setTicketsInProgress, sortOption }) => {
     const [isSortOpened, setSortOpened] = useState(false);
-    const [selectedSortOption, setSelectedSortOption] = useState('newest');
+    const [selectedSortOption, setSelectedSortOption] = useState(sortOption);
     const [showOnlyInProgress, setShowOnlyInProgress] = useState(true);
     const sortOptions = [
         { sortOption: 'newest', sortDescription: 'Сначала новые' },
@@ -26,6 +26,10 @@ const Sort = ({ setSortOption, setTicketsInProgress }) => {
         setTicketsInProgress(event.target.checked);
     };
 
+    useEffect(() => {
+        setSelectedSortOption(sortOption);
+    }, [sortOption]);
+    
     useEffect(() => {
         setSortOpened(false);
     }, [selectedSortOption]);
@@ -84,7 +88,7 @@ const Sort = ({ setSortOption, setTicketsInProgress }) => {
                     <motion.fieldset
                         key='fieldset'
                         initial={{ height: 0 }}
-                        animate={{ height: 'auto' }}
+                        animate={{ height: '250px' }}
                         exit={{ height: 0, opacity: 0, transition: {delay: .2} }}
                         transition={{ type: 'tween', duration: .3}}
                         className='incident-sort__div'>
@@ -116,7 +120,7 @@ const Sort = ({ setSortOption, setTicketsInProgress }) => {
                         exit={{ opacity: 0, display: 'none'}}
                         transition={{ delay: .2, type: 'spring'}}
                         className="incident-sort__item" onClick={(event) => event.stopPropagation()}>
-                            <p className="incident-sort__item__paragraph">Показать только открытые</p>
+                            <p className="incident-sort__item__paragraph" style={{marginLeft: '0'}}>Показать только открытые</p>
                             <label className="switch">
                                 <input type="checkbox" onChange={handleCheckboxChange} checked={showOnlyInProgress} />
                                 <span className="slider round"></span>

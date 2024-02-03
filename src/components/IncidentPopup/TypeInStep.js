@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 export default function TypeInStep({
@@ -5,11 +6,27 @@ export default function TypeInStep({
   selectedComponent,
   handlePrevStep,
   setDescription,
-  handleSubmit
+  handleSubmit,
+  isLoading,
+  description
 }) {
+  const [isEmpty, setIsEmpty] = useState(false);
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    if (!description.trim()) {
+      setIsEmpty(true);
+      return;
+    }
+    setIsEmpty(false);
+    handleSubmit(e);
+  };
+
   return (
     <>
-      <button className="incident-popup__button-back" onClick={handlePrevStep}>&#8249;<span>Назад</span></button>
+      <button className="incident-popup__button-back" onClick={handlePrevStep}>
+        &#8249;<span>Назад</span>
+      </button>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -29,20 +46,27 @@ export default function TypeInStep({
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
         className="incident-popup__paragraph" style={{ marginTop: '70px', marginBottom: '15px' }}>Описание:</motion.p>
-      <motion.form
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className="incident-popup__form" onSubmit={(e) => handleSubmit(e)}>
-        <input
-          id="description"
-          placeholder="Описание обращения"
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        ></input>
-        <button className="incident-popup__button">Отправить</button>
-      </motion.form>
+        className="incident-popup__form">
+        <form className="incident-popup__form" onSubmit={handleFormSubmit}>
+          <textarea
+            className="incident-popup__textarea"
+            id="description"
+            placeholder="Описание обращения"
+            onChange={(e) => setDescription(e.target.value)}
+            required
+            minLength={15}
+          ></textarea>
+          {isEmpty && <p style={{ color: "red" }}>Поле не может быть пустым</p>}
+          <button className="incident-popup__button" type="submit" disabled={isLoading}>
+            {isLoading ? 'Отправка...' : 'Отправить'}
+          </button>
+        </form>
+      </motion.div>
     </>
   );
 }

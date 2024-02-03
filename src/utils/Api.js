@@ -73,6 +73,40 @@ export class Api {
         return this._handleResponse(response);
     }
 
+    async addNewCommunication(token, incidentUuid, message) {
+        const response = await fetch(`${this._baseUrl}/externalapi/performCustomActionWithIncident/`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Basic ${token}`,
+            },
+            body: JSON.stringify({
+                "Action": "AddNewCommunication",
+                "IncUuid": `${incidentUuid}`,
+                "Commentary": `${message}`,
+            })
+        });
+        return this._handleResponse(response);
+    }
+    
+    async addNewFile(token, incidentUuid, files, message) {
+        const response = await fetch(`${this._baseUrl}/externalapi/performCustomActionWithIncident/`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Basic ${token}`,
+            },
+            body: JSON.stringify({
+                "Action": "AddNewCommunicationWithFile",
+                "IncUuid": `${incidentUuid}`,
+                "Files": files,
+                "Commentary": `${message}`,
+            })
+        });
+        return this._handleResponse(response);
+    }
+    
+
 
     _handleResponse = async (res) => {
         if (res.ok) {
