@@ -1,5 +1,4 @@
-.rate__stars__div {
-}
+.rate__stars__div {}
 
 .rate__star {
     opacity: .7;
@@ -9,4 +8,11 @@
 
 .rate__star:hover {
     cursor: pointer;
+}
+
+@media screen and (max-width: 1439px) {
+    .rate__star {
+        box-sizing: border-box;
+        width: 20px;
+    }
 }

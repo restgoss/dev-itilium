@@ -1,4 +1,4 @@
-import logo from '../../utils/images/pridex_black.svg';
+import logo from '../../utils/images/pridex_color.svg';
 import logout from '../../utils/images/logout.svg';
 function Header({ isLoggedIn, onSignOut, setPopupOpened }) {
     const handleLogoutClick = () => {

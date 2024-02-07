@@ -53,7 +53,7 @@ export default function Messenger({ messageHistory, selectedIncidentUuid, fetchS
         if (inputValue) {
             const interval = setInterval(() => {
                 fetchSelectedIncident();
-            }, 120000);
+            }, 60000);
 
             return () => clearInterval(interval);
         }

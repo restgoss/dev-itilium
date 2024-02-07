@@ -51,22 +51,18 @@ fieldset {
     display: flex;
     align-items: center;
     flex-direction: row;
-    width: calc(100% - 15px);
     padding-left: 15px;
     transition: .3s ease-in-out;
+    user-select: none;
 }
 
 
 .incident-sort__item:last-of-type {
-    margin-top: 10px;
-    border-top: 1px solid #d9d9d9;
     align-self: center;
     padding-left: 0;
-    justify-content: space-evenly;
 }
 
 .incident-sort__item:hover {
-    background-color: #d9d9d9;
     cursor: pointer;
 }
 
@@ -125,7 +121,7 @@ fieldset {
 }
 
 input:checked+.slider {
-    background-color: #000000;
+    background-color: rgba(0,130,200,1);
 }
 
 input:focus+.slider {

@@ -18,6 +18,11 @@
 
 body {
   background-color: rgba(220, 220, 220, 0.322);
+  height: 100vh;
+}
+
+#root {
+  height: 100%;
 }
 
 .App {
@@ -26,7 +31,8 @@ body {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  text-overflow: ellipsis
+  text-overflow: ellipsis;
+  height: 100%;
 }
 
 .App-logo {
@@ -86,14 +92,10 @@ input {
 
 .incident-list__field {
   position: relative;
-  display: grid;
+  display: flex;
+  justify-content: space-between;
   justify-items: center;
   padding: 0 15px 0 15px;
-  gap: 15px 15px;
-  grid-template-columns: 5fr 3fr 3fr;
-  grid-template-rows: 1fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
   align-items: center;
   border-bottom: 1px solid #d9d9d9;
   height: 65px;
@@ -208,12 +210,13 @@ input {
 
 .incident-popup__form button {
   border: none;
-  background-color: #000;
+  background-color: rgba(0,130,200,1);
   color: #fff;
   width: 150px;
   height: 50px;
   border-radius: 6px;
   font-family: inherit;
+  font-weight: bold;
 }
 
 .incident-popup__form button:hover {
@@ -244,8 +247,9 @@ input {
 .incident-popup__button {
   font-family: inherit;
   font-size: 14px;
+  font-weight: bold;
   border: none;
-  background-color: #000;
+  background-color: rgba(0,130,200,1);
   color: #fff;
   width: 150px;
   height: 50px;
@@ -343,9 +347,9 @@ input {
 .incident-popup__close-button {
   width: 30px;
   height: 30px;
-  background-color: #000;
+  background-color: rgba(0,130,200,1);
   color: #fff;
-  border: 1px solid #000;
+  border: 1px solid #d9d9d9;
   border-radius: 6px;
   z-index: 1000;
   position: absolute;
@@ -417,14 +421,14 @@ input {
   font-family: inherit;
   font-size: 14px;
   border: none;
-  background-color: #000;
+  background-color: rgba(0,130,200,1);
   color: #fff;
   width: 125px;
   height: 50px;
   border-radius: 6px;
   font-weight: bold;
-  margin: 10px 0 10px 0;
   transition: .3s ease-in-out;
+  font-weight: bold;
 }
 
 .form button:hover {
@@ -438,6 +442,7 @@ input {
 
 header {
   display: flex;
+  position: relative;
   width: 100%;
   flex-direction: row;
   padding: 15px 0 15px 0;
@@ -445,12 +450,13 @@ header {
   border-bottom: 1px solid #d9d9d9;
   align-items: center;
   background-color: #fff;
+  user-select: none;
 }
 
 .header__logo {
   margin-top: 10px;
   margin-left: 30px;
-  width: 150px;
+  user-select: none;
   height: 35px;
 }
 
@@ -458,6 +464,7 @@ header {
   width: 25px;
   height: 24px;
   margin-right: 30px;
+  user-select: none;
 }
 
 .header__button:hover {
@@ -466,6 +473,7 @@ header {
 
 .profile-page-block {
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -494,7 +502,6 @@ header {
 }
 
 .profile-div {
-  margin-top: 30px;
   width: 90%;
   border-radius: 6px;
   height: 768px;
@@ -506,8 +513,11 @@ header {
 }
 
 .incident-list__table {
+  display: flex;
+  flex-direction: column;
   position: relative;
   width: 45%;
+  height: 100%;
   border-right: 1px solid #d9d9d9;
 }
 
@@ -587,18 +597,20 @@ header {
 }
 
 .incident-list__row_active {
-  background-color: #d9d9d9;
+  background-color: rgba(0,130,200,0.08);
+  color: rgba(0,130,200,1);
 }
 
 
 
 .incident-list__row:hover {
   cursor: pointer;
-  background-color: #f0f0f0;
+  color: rgba(0,130,200,1);
+  background-color: rgba(0,130,200,0.08);
 }
 
 .incident-list__row_active:hover {
-  background-color: #d9d9d9;
+  background-color: rgba(0,130,200,0.08);
 }
 
 .incident-list__header .incident-list__cell:hover {
@@ -622,7 +634,6 @@ header {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   width: 55%;
 }
@@ -635,7 +646,7 @@ header {
   justify-content: space-between;
   flex-direction: row;
   border-bottom: 1px solid #D9D9D9;
-  background-color: #000000;
+  background-color: rgba(0,130,200,1);
   align-items: center;
   border-radius: 0 6px 0 0;
   color: #fff;
@@ -669,14 +680,15 @@ header {
   display: flex;
   flex-direction: column;
   width: 100%;
+  position: relative;
   height: calc(100% - 67px);
-  max-height: 768px;
 }
 
 .incident-info__text-div {
   display: flex;
   flex-direction: column;
-  height: auto;
+  height: 45%;
+  justify-content: space-between;
 }
 
 .incident-info__text-block {
@@ -704,10 +716,11 @@ header {
   overflow: hidden;
   margin: 10px 0 0 0;
   text-align: left;
+  overflow-wrap: anywhere;
 }
 
 .incident-info__curator {
-  height: 62px;
+  min-height: 62px;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
@@ -738,7 +751,8 @@ header {
 }
 
 .incident-info__selectincident {
-  margin-top: -60px;
+  margin: 30% 0 0 0;
+  width: 100%;
 }
 
 @media screen and (max-width: 767px) {}
@@ -747,17 +761,47 @@ header {
 
 @media screen and (max-width: 1279px) {
 
-  .incident-info__selectincident {
-    margin-top: -100px;
+}
+
+@media screen and (max-width: 1439px) {
+
+  .incident-info__header {
+    height: 50px;
+    min-height: 50px;
   }
 
-  .incident-list__add-button {
-    width: 60px;
+  .incident-info__text-block{
+    padding: 20px;
   }
 
-  .incident-list__add-button__paragraph {
-    display: none;
+  .incident-info__curator {
+    padding: 0 20px;
   }
+
+  .incident-info__block {
+    height: calc(100% - 51px)
+  }
+
+  .incident-info__text-div {
+    font-size: 14px;
+  }
+
+  .incident-list__field {
+    height: 50px;
+  }
+
+  .incident-list__row {
+    font-size: 14px;
+  }
+
+  .incident-list__header {
+    font-size: 14px;
+  }
+
+  .incident-sort__item__paragraph {
+    font-size: 14px;
+  }
+
 }
 
 @keyframes App-logo-spin {

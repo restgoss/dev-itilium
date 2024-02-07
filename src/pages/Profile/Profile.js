@@ -78,16 +78,16 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
         console.log('defaultcase');
     }
     return sortedList;
-};
+  };
 
-const convertDateFormat = (dateString) => {
-  const [datePart, timePart] = dateString.split(' ');
-  const [day, month, year] = datePart.split('.');
-  let [hours, minutes, seconds] = timePart.split(':');
-  hours = hours.length === 1 ? `0${hours}` : hours;
+  const convertDateFormat = (dateString) => {
+    const [datePart, timePart] = dateString.split(' ');
+    const [day, month, year] = datePart.split('.');
+    let [hours, minutes, seconds] = timePart.split(':');
+    hours = hours.length === 1 ? `0${hours}` : hours;
 
-  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-};
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+  };
   useEffect(() => {
     console.log(sortOption);
     const sortedList = sortIncidents(incidentsList, sortOption);
@@ -119,11 +119,9 @@ const convertDateFormat = (dateString) => {
         <div className='profile-div'>
           <div className='incident-list__table'>
             <div className='incident-list__field'>
-              <Search />
-              <Sort key='sort_component' setSortOption={setSortOption} setTicketsInProgress={setTicketsInProgress} sortOption={sortOption} />
+              <Sort key='sort_component' setSortOption={setSortOption} setTicketsInProgress={setTicketsInProgress} sortOption={sortOption} ticketsInProgress={ticketsInProgress} />
               <div className='incident-list__add-button' onClick={() => setPopupOpened(true)}>
                 <p className='incident-list__add-button__paragraph'>Создать</p>
-                <p className='incident-list__add-button__plus'>+</p>
               </div>
             </div>
             <div className='incident-list__header'>
@@ -137,12 +135,12 @@ const convertDateFormat = (dateString) => {
                 {sortOption == 'numberDecrement' && <img className='incident-list__header__arrow' src={sort_down} alt=''></img>}
                 {sortOption == 'numberIncrement' && <img className='incident-list__header__arrow' src={sort_up} alt=''></img>}
               </div>
-              <div className='incident-list__header__cell' id='third-column'>Тема</div>
+              <div className='incident-list__header__cell no-hover' id='third-column'>Тема</div>
               <div className='incident-list__header__cell' id='fourth-column' onClick={() => handleSortClick('alphabet')}>
                 <p>Статус</p>
                 {sortOption == 'alphabet' && <img className='incident-list__header__arrow' src={sort_down} alt=''></img>}
                 {sortOption == 'alphabetReverse' && <img className='incident-list__header__arrow' src={sort_up} alt=''></img>}
-                </div>
+              </div>
             </div>
             <div className='incident-list__body' >
               <OverlayScrollbarsComponent options={{ scrollbars: { autoHide: "leave" } }}>
@@ -162,7 +160,7 @@ const convertDateFormat = (dateString) => {
                       >
                         <p className='incident-list__row__p'>{incident.date.split(':').slice(0, -1).join(':')}</p>
                         <p className='incident-list__row__p'>{incident.number.replace(/^0+/, '')}</p>
-                        <p className='incident-list__row__p'>{incident.topic}</p>
+                        <p className='incident-list__row__p' style={{ textAlign: 'left' }}>{incident.topic}</p>
                         <p className='incident-list__row__p'>{incident.state}</p>
                       </div>
                     ))
@@ -174,24 +172,35 @@ const convertDateFormat = (dateString) => {
           <div className='incident-info__div'>
             {selectedIncidentUuid ? (
               isSelectedIncidentLoading ? (
-                <motion.img
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  src={loading} className='incident-info__loading' alt='Загрузка...'></motion.img>
+                  exit={{ opacity: 0 }} 
+                  style={{height: '100%', width: '100%'}}>
+                  <motion.img
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    src={loading} className='incident-info__loading' alt='Загрузка...'></motion.img>
+                </motion.div>
               ) : (
                 <>
-                    <div className='incident-info__header'>
-                      <div className='incident-info__first-cell'>
-                        <span>№ </span>
-                        {selectedIncident.number}
-                      </div>
-                      <div className='incident-info__second-cell'>
-                        <span>От: </span>
-                        {selectedIncident.date}
-                      </div>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: .5, type: 'tween', delay: .3 }}
+                    className='incident-info__header'>
+                    <div className='incident-info__first-cell'>
+                      <span>№ </span>
+                      {selectedIncident.number}
                     </div>
-                    <motion.div
+                    <div className='incident-info__second-cell'>
+                      <span>От: </span>
+                      {selectedIncident.date}
+                    </div>
+                  </motion.div>
+                  <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}

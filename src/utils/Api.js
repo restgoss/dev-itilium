@@ -19,6 +19,37 @@ export class Api {
         return this._handleResponse(response);
     }
 
+    async LoginAD({username, password}) {
+        const response = await fetch(`http://10.129.0.9/api/v1/auth/token/login/`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                "username": `${username}`,
+                "password": `${password}`
+            })
+        });
+        if(response.status === 401) {
+            return null;
+        }
+        return this._handleResponse(response);
+    }
+
+    async getToken(token) {
+        const response = await fetch(`http://10.129.0.9/api/v1/users/me/`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Token ${token}`
+            },
+        });
+        if(response.status === 401) {
+            return null;
+        }
+        return this._handleResponse(response);
+    }
+
     async getIncidents(token, iniciatorUuid) {
         const response = await fetch(`${this._baseUrl}/externalapi/getIncidentsList`, {
             method: 'POST',

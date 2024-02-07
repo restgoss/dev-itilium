@@ -23,7 +23,7 @@ export default function Message({ message }) {
             return parts.map((part, i) => {
                 if (part.match(urlRegex)) {
                     const truncatedText = part.length > 50 ? part.substring(0, 43) + '...' : part;
-                    return <a className='message__message' style={{ color: '#fff' }} key={i} href={part} target="_blank" rel="noopener noreferrer">{truncatedText}</a>;
+                    return <a className='message__message' style={{ color: '#000' }} key={i} href={part} target="_blank" rel="noopener noreferrer">{truncatedText}</a>;
                 } else {
                     return <p className='message__message' key={i}>{part}</p>;
                 }

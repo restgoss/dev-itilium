@@ -9,36 +9,38 @@ import api from './utils/Api';
 import LoadingPage from './pages/LoadingPage';
 import IncidentDetails from './pages/IncidentDetails';
 import Header from './components/Header/Header';
-import AddNewIncident from './pages/AddNewIncident';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [incidentsList, setIncidentsList] = useState([]);
   const [isPopupOpened, setPopupOpened] = useState(false);
+  const [loginError, setLoginError] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
 
   const onSignIn = async ({ username, password }) => {
     try {
       setIsLoading(true);
-      const token = btoa(`${username}:${password}`);
-      console.log(isLoggedIn);
-      const res = await api.Login(token);
-      localStorage.setItem('jwt', token);
-      localStorage.setItem('currentUserUuid', res.UTekP);
-      localStorage.setItem('currentPhysUuid', res.UFiz);
-      localStorage.setItem('currentIniciatorUuid', res.UIniciator);
+      const tokenAD = await api.LoginAD({ username, password });
+      const token = await api.getToken(tokenAD.auth_token);
+      localStorage.setItem('jwt', token.Token);
+      const { UTekP, UFiz, UIniciator } = await api.Login(token.Token);
+      localStorage.setItem('currentUserUuid', UTekP);
+      localStorage.setItem('currentPhysUuid', UFiz);
+      localStorage.setItem('currentIniciatorUuid', UIniciator);
       setIsLoggedIn(true);
       navigate('/profile');
+      fetchIncidents();
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
+      setLoginError('Неверный логин или пароль');
       setIsLoggedIn(false);
       localStorage.clear();
     } finally {
       setIsLoading(false);
-      fetchIncidents();
     }
   }
+  
 
   const onSignOut = () => {
     localStorage.clear();
@@ -82,6 +84,16 @@ function App() {
   }, [location, isLoggedIn]);
 
   useEffect(() => {
+    if (isLoggedIn) {
+        const interval = setInterval(() => {
+          fetchIncidents();
+        }, 60000);
+
+        return () => clearInterval(interval);
+    }
+}, [fetchIncidents]);
+
+  useEffect(() => {
     const token = localStorage.getItem('jwt');
     if (token && !isLoggedIn) {
       setIsLoggedIn(true);
@@ -99,7 +111,7 @@ function App() {
         <div className="App">
           <Header isLoggedIn={isLoggedIn} onSignOut={onSignOut} setPopupOpened={setPopupOpened} />
           <Routes>
-            <Route path='/sign-in' element={<Login onSignIn={onSignIn} />} />
+            <Route path='/sign-in' element={<Login onSignIn={onSignIn} loginError={loginError} />} />
             <Route
               path='/profile'
               element={
@@ -121,10 +133,6 @@ function App() {
             <Route
               path='/status-test'
               element={isLoggedIn ? <Navigate to='/profile' /> : <Navigate to='/sign-in' />}
-            />
-            <Route
-              path='/add-new-incident'
-              element={<AddNewIncident onSubmit={addNewIncident} />}
             />
             <Route path='*' element={isLoggedIn ? <Navigate to='/profile' /> : <Navigate to='/sign-in' />} />
           </Routes>

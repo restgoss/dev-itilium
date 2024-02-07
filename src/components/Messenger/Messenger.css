@@ -1,17 +1,20 @@
 .messenger__div {
     display: flex;
     flex-direction: column;
-    max-height: 60%;
-    justify-content: flex-end;
+    min-height: 1px;
 }
 
 .messenger__field {
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
     overflow-x: hidden;
     width: 100%;
-    height: auto;
+    box-shadow: 0px 0px 5px 1px rgba(34, 60, 80, 0.2) inset;
+    background-image: url('../../utils/images/background.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .messenger__placeholder {
@@ -23,16 +26,10 @@
 }
 
 .messenger__input-div {
-    position: absolute;
-    bottom: 0;
     background-color: #fff;
     border-top: 1px solid #d9d9d9;
-    align-self: flex-end;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     width: 100%;
-    margin-top: auto;
+    border-radius: 0 0 8px 0;
 }
 
 .messenger__type-in {
@@ -76,7 +73,7 @@
     background-image: url('../../utils/images/clip.png');
     background-repeat: no-repeat;
     border: none;
-    margin: 0 0 0 5px;
+    margin: 0 0 0 8px;
     padding: 0 15px 0 0;
 }
 
@@ -156,13 +153,14 @@ input[type="file"] {
     position: relative;
     display: flex;
     flex-direction: column;
-    background-color: rgb(0, 0, 0);
-    color: #fff;
+    background-color: #fff;
+    color: #000;
     overflow: hidden;
     border-radius: 15px;
     margin-right: auto;
     margin-left: 30px;
     margin-bottom: 15px;
+    box-shadow: 0px 2px 5px 0px rgba(34, 60, 80, 0.2);
 }
 
 .message__div-self:first-of-type {
@@ -178,13 +176,14 @@ input[type="file"] {
     display: flex;
     align-self: flex-end;
     flex-direction: column;
-    background-color: #0076DF;
-    color: #fff;
+    background-color: #DFF1FF;
+    color: #000;
     overflow: hidden;
     border-radius: 15px;
     margin-bottom: 15px;
     margin-left: auto;
     margin-right: 30px;
+    box-shadow: 0px 2px 5px 0px rgba(34, 60, 80, 0.2);
 }
 
 .messenger__pinned-file {
@@ -200,7 +199,7 @@ input[type="file"] {
     margin: 0;
     font-size: 12px;
     align-self: flex-end;
-    color: #d9d9d9;
+    color: #747474;
 }
 
 .message__text {
@@ -257,4 +256,19 @@ input[type="file"] {
     border-radius: 10px;
     padding: 5px;
     user-select: none;
+    box-shadow: inset 0 0 2px #000;
+}
+
+@media screen and (max-width: 1439px) {
+    .message__message {
+        font-size: 14px;
+    }
+
+    .message__name {
+        font-size: 12px;
+    }
+
+    .message__file {
+        font-size: 12px;
+    }
 }
