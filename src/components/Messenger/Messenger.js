@@ -10,7 +10,7 @@ import "overlayscrollbars/styles/overlayscrollbars.css";
 import Message from './Message';
 import api from '../../utils/Api';
 
-export default function Messenger({ messageHistory, selectedIncidentUuid, fetchSelectedIncident }) {
+export default function Messenger({ messageHistory, selectedIncidentUuid, fetchSelectedIncident, isIncidentClosed }) {
     const [inputValue, setInputValue] = useState('');
     const [isLoading, setLoading] = useState(false);
     const [fileBase64, setFileBase64] = useState(null);
@@ -92,43 +92,52 @@ export default function Messenger({ messageHistory, selectedIncidentUuid, fetchS
         <>
             <div className="messenger__div">
                 <div className='messenger__field'>
-                    <OverlayScrollbarsComponent id='messenger__block' 
-                        options={{ scrollbars: { autoHide: "leave" } }} style={{ maxHeight: '100%', display: 'flex' }}>
+                    <OverlayScrollbarsComponent
+                        id='messenger__block'
+                        options={{ scrollbars: { autoHide: "leave" } }}
+                        style={{ maxHeight: '100%', display: 'flex' }}
+                        events={{
+                            initialized: (instance) => {
+                              instance.elements().viewport.scrollTo(9999, 9999);
+                            },
+                          }}
+                    >
                         {reversedMessageHistory.map((item, index) => {
-                            return <Message key={index} message={item} />
+                            return <Message key={item + index} message={item} />
                         })}
                     </OverlayScrollbarsComponent>
                 </div>
                 <motion.div className="messenger__input-div">
-                <div className="messenger__input-area">
-                    <div className='messenger__type-in'>
-                        <label className="messenger__add-file">
-                            <input type='file' onChange={handleFileChange} />
-                        </label>
-                        <TextareaAutosize
-                            maxRows={25}
-                            required
-                            type="text"
-                            className="messenger__input"
-                            value={inputValue}
-                            placeholder='Напишите сообщение...'
-                            onChange={(e) => setInputValue(e.target.value)}
-                            onKeyDown={handleKeyPress}>
-
-                        </TextareaAutosize >
-                        <button className='messenger__send' src={isLoading ? loading : send} alt='' onClick={handleSendMessage} />
-                    </div>
-                    {fileBase64 ? (
-                        <div className='messenger__area'>
-                            <p className='messenger__pinned-file'>Файл во вложении: <span>{fileBase64.Name}</span></p>
-                            <img onClick={() => setFileBase64(null)} className='messenger__area__cross' alt='' src={red_cross}></img>
+                    <div className="messenger__input-area">
+                        <div className='messenger__type-in'>
+                            <label className="messenger__add-file" style={{ display: isIncidentClosed ? 'none' : null }}>
+                                <input type='file' onChange={handleFileChange} style={{ display: isIncidentClosed ? 'none' : null }} />
+                            </label>
+                            <TextareaAutosize
+                                style={{ marginLeft: isIncidentClosed ? '20px' : null }}
+                                maxRows={25}
+                                required
+                                type="text"
+                                className="messenger__input"
+                                value={inputValue}
+                                placeholder={isIncidentClosed ? 'Заявка закрыта, отправка сообщений ограничена.' : 'Напишите сообщение...'}
+                                onChange={(e) => setInputValue(e.target.value)}
+                                onKeyDown={handleKeyPress}
+                                disabled={isIncidentClosed}>
+                            </TextareaAutosize >
+                            <button className='messenger__send' src={isLoading ? loading : send} alt='' onClick={handleSendMessage} />
                         </div>
-                    ) : null}
-                </div>
+                        {fileBase64 ? (
+                            <div className='messenger__area'>
+                                <p className='messenger__pinned-file'>Файл во вложении: <span>{fileBase64.Name}</span></p>
+                                <img onClick={() => setFileBase64(null)} className='messenger__area__cross' alt='' src={red_cross}></img>
+                            </div>
+                        ) : null}
+                    </div>
 
-            </motion.div>
+                </motion.div>
             </div>
-            
+
         </>
     );
 }

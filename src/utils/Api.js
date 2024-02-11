@@ -13,38 +13,34 @@ export class Api {
                 "Authorization": `Basic ${token}`,
             },
         });
-        if(response.status === 401) {
+        if (response.status === 401) {
             return null;
         }
         return this._handleResponse(response);
     }
 
-    async LoginAD({username, password}) {
-        const response = await fetch(`http://10.129.0.9/api/v1/auth/token/login/`, {
-            method: 'POST',
+    async LoginAD({ username, password }) {
+        const response = await fetch(`https://support.pridex.ru/auth?username=${username}&password=${password}`, {
+            method: 'GET',
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                "username": `${username}`,
-                "password": `${password}`
-            })
         });
-        if(response.status === 401) {
+        if (response.status === 401) {
             return null;
         }
         return this._handleResponse(response);
     }
 
     async getToken(token) {
-        const response = await fetch(`http://10.129.0.9/api/v1/users/me/`, {
+        const response = await fetch(`https://support.pridex.ru/api/v1/users/me/`, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Token ${token}`
             },
         });
-        if(response.status === 401) {
+        if (response.status === 401) {
             return null;
         }
         return this._handleResponse(response);
@@ -77,7 +73,7 @@ export class Api {
         });
         return this._handleResponse(response);
     }
-    
+
     async fetchServiceComponent(token, serviceUuid) {
         const response = await fetch(`${this._baseUrl}/externalapi/getServiceComponents`, {
             method: 'POST',
@@ -93,7 +89,19 @@ export class Api {
     }
 
     async addNewIncident(token, body) {
-        const response = await fetch(`${this._baseUrl}/mobiledata/addNewIncident/`, {
+        const response = await fetch(`${this._baseUrl}/externalapi/performCustomActionWithIncident`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Basic ${token}`,
+            },
+            body: JSON.stringify(body)
+        });
+        return this._handleResponse(response);
+    }
+
+    async addNewIncidentV1(token, body) {
+        const response = await fetch(`${this._baseUrl}/mobiledata/addNewIncident`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -119,7 +127,7 @@ export class Api {
         });
         return this._handleResponse(response);
     }
-    
+
     async addNewFile(token, incidentUuid, files, message) {
         const response = await fetch(`${this._baseUrl}/externalapi/performCustomActionWithIncident/`, {
             method: 'POST',
@@ -136,7 +144,7 @@ export class Api {
         });
         return this._handleResponse(response);
     }
-    
+
 
 
     _handleResponse = async (res) => {
@@ -148,7 +156,7 @@ export class Api {
 }
 
 const api = new Api({
-    baseUrl: 'http://itilium-web.inex-d.local/Itilium/hs',
+    baseUrl: 'https://support.pridex.ru/Itilium/hs',
     headers: {
         "Content-Type": "application/json",
     },

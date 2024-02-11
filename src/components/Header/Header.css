@@ -1,0 +1,27 @@
+.header__user-field {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.header__user-img {
+    width: 20px;
+    height: 20px;
+    user-drag: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.header__full-name {
+    margin: 0 35px 0 15px;
+    font-weight: 100;
+    user-drag: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}

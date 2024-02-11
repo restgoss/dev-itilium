@@ -12,12 +12,12 @@ import sort_down from '../../utils/images/sort-down.png';
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 import IncidentPopup from '../../components/IncidentPopup/IncidentPopup';
 import Rate from '../../components/Rate/Rate';
-const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
+const Profile = ({ incidentsList, isPopupOpened, setPopupOpened, fetchIncidents }) => {
   const [selectedIncidentUuid, setSelectedIncidentUuid] = useState(null);
   const [selectedIncident, setSelectedIncident] = useState(null);
   const [isSelectedIncidentLoading, setSelectedIncidentLoading] = useState(true);
   const [sortedIncidentsList, setIncidentsList] = useState([]);
-
+  const [isIncidentClosed, setIsIncidentClosed] = useState(false);
   const [sortOption, setSortOption] = useState('newest');
   const [ticketsInProgress, setTicketsInProgress] = useState(true);
 
@@ -88,8 +88,8 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
 
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
   };
+  
   useEffect(() => {
-    console.log(sortOption);
     const sortedList = sortIncidents(incidentsList, sortOption);
     setIncidentsList(sortedList);
   }, [incidentsList, sortOption]);
@@ -100,6 +100,8 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
       const token = localStorage.getItem('jwt');
       const res = await api.getIncidentsDetails(token, selectedIncidentUuid);
       setSelectedIncident(res);
+      const isClosed = ['Отклонено', 'Не согласовано', 'Закрыто'].includes(res.state);
+      setIsIncidentClosed(isClosed);
     } catch (error) {
       console.log(error);
     } finally {
@@ -145,16 +147,16 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
             <div className='incident-list__body' >
               <OverlayScrollbarsComponent options={{ scrollbars: { autoHide: "leave" } }}>
                 {sortedIncidentsList.length === 0 ? (
-                  <p className='incident-info__selectincident'>Обращений в работе нету</p>
+                  <p className='incident-info__selectincident'>Все Ваши обращения выполнены</p>
                 ) : (
                   sortedIncidentsList
                     .filter((item) =>
                       (ticketsInProgress && !['Отклонено', 'Не согласовано', 'Закрыто'].includes(item.state)) ||
                       (!ticketsInProgress)
                     )
-                    .map((incident) => (
+                    .map((incident, index) => (
                       <div
-                        key={incident.number}
+                        key={`${incident.linkUuid}-${index}`}
                         className={selectedIncidentUuid && selectedIncidentUuid === incident.linkUuid ? 'incident-list__row incident-list__row_active' : 'incident-list__row'}
                         onClick={() => setSelectedIncidentUuid(incident.linkUuid)}
                       >
@@ -175,8 +177,9 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }} 
-                  style={{height: '100%', width: '100%'}}>
+                  exit={{ opacity: 0 }}
+                  style={{ height: '100%' }}>
+
                   <motion.img
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -185,57 +188,58 @@ const Profile = ({ incidentsList, isPopupOpened, setPopupOpened }) => {
                 </motion.div>
               ) : (
                 <>
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: .5, type: 'tween', delay: .3 }}
-                    className='incident-info__header'>
-                    <div className='incident-info__first-cell'>
-                      <span>№ </span>
-                      {selectedIncident.number}
-                    </div>
-                    <div className='incident-info__second-cell'>
-                      <span>От: </span>
-                      {selectedIncident.date}
-                    </div>
-                  </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: .5, type: 'tween', delay: .3 }}
-                    className='incident-info__block'>
-                    <div className='incident-info__text-div'>
-                      <div className='incident-info__text-block'>
-                        <p className='incident-info__topic'>
-                          <span>Тема: </span>
-                          <p>{selectedIncident.topic}</p>
-                        </p>
-                        <p className='incident-info__topic' style={{ marginTop: '20px' }}><span>Описание:</span></p>
-                        <OverlayScrollbarsComponent style={{ maxHeight: '90px' }} options={{ scrollbars: { autoHide: "leave" } }}>
-                          <p className='incident-info__description'>{selectedIncident.description}</p>
-                        </OverlayScrollbarsComponent>
-                      </div>
-                      <div className='incident-info__curator'>
-                        <div className='incident-info__status'>
-                          <span className='incident-info__status__span'>Статус: </span>
-                          <p className='incident-info__status__p'>{selectedIncident.state}</p>
+                  <AnimatePresence>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: .5, type: 'tween', delay: .3 }}
+                      className='incident-info__header'>
+                      <motion.div className='incident-info__first-cell'>
+                        <span>№ </span>
+                        {selectedIncident.number}
+                      </motion.div>
+                      <motion.div className='incident-info__second-cell'>
+                        <span>От: </span>
+                        {selectedIncident.date}
+                      </motion.div>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: .5, type: 'tween', delay: .3 }}
+                      className='incident-info__block'>
+                      <div className='incident-info__text-div'>
+                        <div className='incident-info__text-block'>
+                          <p className='incident-info__topic'>
+                            <span>Тема: </span>
+                            <p>{selectedIncident.topic}</p>
+                          </p>
+                          <p className='incident-info__topic' style={{ marginTop: '20px' }}><span>Описание:</span></p>
+                          <OverlayScrollbarsComponent style={{ maxHeight: '90px' }} options={{ scrollbars: { autoHide: "leave" } }}>
+                            <p className='incident-info__description'>{selectedIncident.description}</p>
+                          </OverlayScrollbarsComponent>
                         </div>
-                        <Rate />
+                        <div className='incident-info__curator'>
+                          <div className='incident-info__status'>
+                            <span className='incident-info__status__span'>Статус: </span>
+                            <p className='incident-info__status__p'>{selectedIncident.state}</p>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <Messenger messageHistory={selectedIncident.TheHistoryOfCommunication} selectedIncidentUuid={selectedIncidentUuid} fetchSelectedIncident={fetchSelectedIncident} />
-                  </motion.div>
+                      <Messenger isIncidentClosed={isIncidentClosed} messageHistory={selectedIncident.TheHistoryOfCommunication} selectedIncidentUuid={selectedIncidentUuid} fetchSelectedIncident={fetchSelectedIncident} />
+                    </motion.div>
+                  </AnimatePresence>
                 </>
               )
             ) : (
-              <p className='incident-info__selectincident'>Выберите заявку из списка</p>
+              <p className='incident-info__selectincident'>Выберите обращение из списка слева</p>
             )}
           </div>
         </div>
       </div >
-      <IncidentPopup setPopupOpened={setPopupOpened} isPopupOpened={isPopupOpened} />
+      <IncidentPopup setPopupOpened={setPopupOpened} isPopupOpened={isPopupOpened} fetchIncidents={fetchIncidents}/>
     </>
   );
 };

@@ -32,7 +32,7 @@ body {
   align-items: center;
   text-align: center;
   text-overflow: ellipsis;
-  height: 100%;
+  height: 100vh;
 }
 
 .App-logo {
@@ -116,7 +116,7 @@ input {
 .incident-popup {
   display: none;
   width: 100vw;
-  height: 100%;
+  height: 100vh;
   background-color: rgba(0, 0, 0, .4);
   z-index: 999;
 }
@@ -133,9 +133,13 @@ input {
 .incident-popup_active {
   display: flex;
   flex-direction: column;
-  position: absolute;
   justify-content: center;
   align-items: center;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .incident-popup__span-error {
@@ -379,70 +383,12 @@ input {
   height: 55px;
 }
 
-.form {
-  font-size: 16px;
-  padding: 20px 0 20px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 450px;
-  border: 1px solid #d9d9d9;
-  margin-top: 200px;
-  border-radius: 8px;
-  background-color: #fff;
-}
 
-.form__title {
-  margin-top: 0;
-}
-
-.form_p {
-  align-self: flex-start;
-  margin: 0 0 10px 40px;
-}
-
-.form input {
-  font-family: 'Circe';
-  font-weight: normal;
-  font-size: 14px;
-  border-radius: 6px;
-  width: 350px;
-}
-
-.form input:last-of-type {
-  margin: 0 0 10px 0;
-}
-
-.form input:focus {
-  outline: none;
-}
-
-.form button {
-  font-family: inherit;
-  font-size: 14px;
-  border: none;
-  background-color: rgba(0,130,200,1);
-  color: #fff;
-  width: 125px;
-  height: 50px;
-  border-radius: 6px;
-  font-weight: bold;
-  transition: .3s ease-in-out;
-  font-weight: bold;
-}
-
-.form button:hover {
-  opacity: .8;
-}
-
-.form__title {
-  font-size: 25px;
-  margin-bottom: 20px;
-}
 
 header {
   display: flex;
   position: relative;
+  height: 45px;
   width: 100%;
   flex-direction: row;
   padding: 15px 0 15px 0;
@@ -456,15 +402,21 @@ header {
 .header__logo {
   margin-top: 10px;
   margin-left: 30px;
+  user-drag: none;
+  -webkit-user-drag: none;
   user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
   height: 35px;
 }
 
 .header__button {
-  width: 25px;
-  height: 24px;
+  width: 21px;
+  height: 20px;
   margin-right: 30px;
-  user-select: none;
+  -webkit-user-select: none;
+    user-select: none;
 }
 
 .header__button:hover {
@@ -472,12 +424,12 @@ header {
 }
 
 .profile-page-block {
+  margin-top: 25px;
   width: 100%;
-  height: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
+  height: 100%;
 }
 
 .button-add-new-incident {
@@ -746,6 +698,7 @@ header {
 }
 
 .incident-info__loading {
+  margin-top: 300px;
   width: 45px;
   height: 45px;
 }
@@ -755,11 +708,39 @@ header {
   width: 100%;
 }
 
+@media screen and (min-zoom: 1.25) {
+  .profile-div {
+    height: 150px;
+  }
+}
+
 @media screen and (max-width: 767px) {}
 
-@media screen and (max-width: 1023px) {}
+@media screen and (max-width: 1023px) {
+
+}
 
 @media screen and (max-width: 1279px) {
+  header {
+    height: 25px;
+  }
+
+  .profile-page-block {
+    height: 100%;
+  }
+
+  .incident-popup__services-item p {
+    max-width: 175px;
+    font-size: 14px;
+  }
+
+  .incident-popup__services-item__image {
+    width: 20px;
+  }
+
+  .profile-div {
+    height: 650px;
+  }
 
 }
 
@@ -768,6 +749,7 @@ header {
   .incident-info__header {
     height: 50px;
     min-height: 50px;
+    font-size: 14px;
   }
 
   .incident-info__text-block{
@@ -802,6 +784,9 @@ header {
     font-size: 14px;
   }
 
+  .incident-info__selectincident {
+    font-size: 14px;
+  }
 }
 
 @keyframes App-logo-spin {

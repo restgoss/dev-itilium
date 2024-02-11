@@ -14,10 +14,12 @@
     max-width: 150px;
     justify-self: flex-end;
     margin-right: 15px;
+    transition: .3s ease-in-out;
 }
 
 .incident-list__add-button:hover {
     cursor: pointer;
+    opacity: .7;
 }
 
 .incident-list__add-button__plus {
@@ -36,6 +38,14 @@
     cursor: default;
 }
 
+
+@media screen and (max-width: 1279) {
+    .incident-list__add-button {
+        max-width: 100px;
+        font-size: 14px;
+    }
+}
+
 @media screen and (max-width: 1439px) {
     .incident-list__add-button__paragraph {
         font-size: 14px;
@@ -43,6 +53,7 @@
     }
 
     .incident-list__add-button {
-        max-width: 130px;
+        max-width: 120px;
+        height: 30px;
     }
 }

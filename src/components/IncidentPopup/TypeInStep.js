@@ -56,10 +56,9 @@ export default function TypeInStep({
           <textarea
             className="incident-popup__textarea"
             id="description"
-            placeholder="Описание обращения"
+            placeholder="Подробно опишите,  с чем Вам нужна помощь..."
             onChange={(e) => setDescription(e.target.value)}
             required
-            minLength={15}
           ></textarea>
           {isEmpty && <p style={{ color: "red" }}>Поле не может быть пустым</p>}
           <button className="incident-popup__button" type="submit" disabled={isLoading}>

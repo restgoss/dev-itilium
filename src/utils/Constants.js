@@ -13,6 +13,7 @@ import print from '../utils/images/print.png';
 import remote from '../utils/images/remote.png';
 import files from '../utils/images/files.png';
 import email from '../utils/images/email.png';
+import multispace from '../utils/images/multispace.svg';
 
 export const Services = [
     {
@@ -82,10 +83,10 @@ export const Services = [
         "image": `${bank}`
     },
     {
-        "Service": "Выезд на объект",
+        "Service": "Multispace",
         "ServiceUuid": "85e196bb-7e13-11ee-90a2-0050569f9f23",
         "ServiceCode": "0000000093",
-        "image": `${worker}`
+        "image": `${multispace}`
     }
 ];
 
