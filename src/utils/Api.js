@@ -100,17 +100,6 @@ export class Api {
         return this._handleResponse(response);
     }
 
-    async addNewIncidentV1(token, body) {
-        const response = await fetch(`${this._baseUrl}/mobiledata/addNewIncident`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Basic ${token}`,
-            },
-            body: JSON.stringify(body)
-        });
-        return this._handleResponse(response);
-    }
 
     async addNewCommunication(token, incidentUuid, message) {
         const response = await fetch(`${this._baseUrl}/externalapi/performCustomActionWithIncident/`, {
@@ -144,6 +133,22 @@ export class Api {
         });
         return this._handleResponse(response);
     }
+
+    async getFile(token, fileUuid) {
+        const response = await fetch(`${this._baseUrl}/externalapi/extGetFileData`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Basic ${token}`,
+            },
+            body: JSON.stringify({
+                "idFile": `${fileUuid}`
+            }
+            )
+        });
+        return this._handleResponse(response);
+    }
+
 
 
 

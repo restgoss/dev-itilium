@@ -25,3 +25,17 @@
     -webkit-user-select: none;
     -ms-user-select: none;
 }
+
+.header__link {
+    background-image: url('../../utils/images/manual.png');
+    width: 25px;
+    height: 25px;
+    background-position: center;
+    background-size: contain;
+    transition: .3s ease-in-out;
+}
+
+.header__link:hover {
+    cursor: pointer;
+    opacity: .7;
+}

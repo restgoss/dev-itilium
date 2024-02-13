@@ -20,6 +20,7 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened, fetchInci
     const [selectedComponent, setSelectedComponent] = useState(null);
     const [topic, setTopic] = useState(null);
     const [description, setDescription] = useState(null);
+    const [filesArray, setFilesArray] = useState([]);
 
     const navigate = useNavigate();
 
@@ -63,35 +64,36 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened, fetchInci
         navigate('/profile');
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e, filesArray) => {
         e.preventDefault();
         setLoading(true);
         try {
             const iniciatorUuid = localStorage.getItem('currentIniciatorUuid');
+            const clientUuid = localStorage.getItem('currentClientUuid');
             const token = localStorage.getItem('jwt');
             const body = {
+                Action: "RegisterIncident",
+                ClientUuid: `${clientUuid}`,
                 InitiatorUuid: `${iniciatorUuid}`,
                 Topic: `${topic}`,
                 Data: '12.12.2023 12:13:14',
                 Description: `${description}`,
-                MembershipServices: {
-                    UID: `${selectedService.ServiceUuid}`,
-                    Service: {
-                        UID: `${selectedComponent.ServiceComponentUuid}`
-                    }
-                }
+                ServiceUuid: `${selectedService.ServiceUuid}`,
+                CompositionServiceUuid: `${selectedComponent.ServiceComponentUuid}`,
+                Files: filesArray
             }
-            const res = await api.addNewIncidentV1(token, body);
+            console.log(body)
+            const res = await api.addNewIncident(token, body);
+            setSuccess(true);
+            setCurrentStep(3);
         } catch (error) {
             setSuccess(false);
-            setLoading(false);
             console.log(error);
         } finally {
             setLoading(false);
-            setSuccess(true);
-            setCurrentStep(3);
         }
     };
+    
 
     useEffect(() => {
         const fetchServiceComponentList = async () => {
@@ -132,7 +134,7 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened, fetchInci
                     >
                         <motion.div
                             initial={{ opacity: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
+                            animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.3, type: 'tween' }}
                             key="incbodyanimatekey"
@@ -189,6 +191,7 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened, fetchInci
                                         selectedComponent={selectedComponent}
                                         handleSubmit={handleSubmit}
                                         isLoading={isLoading}
+                                        setFilesArray={setFilesArray}
                                     />
                                 </>
                             )}

@@ -22,13 +22,15 @@ function App() {
   const onSignIn = async ({ username, password }) => {
     try {
       setIsLoading(true);
-      const token = await api.LoginAD({ username, password });
+      const encodedPassword = encodeURIComponent(password);
+      const token = await api.LoginAD({ username, password: encodedPassword });
       localStorage.setItem('jwt', token.Token);
-      const { UTekP, UFiz, UIniciator, Full_name } = await api.Login(token.Token);
+      const { UTekP, UFiz, UIniciator, Full_name, UClient } = await api.Login(token.Token);
       localStorage.setItem('currentUserUuid', UTekP);
       localStorage.setItem('currentPhysUuid', UFiz);
       localStorage.setItem('currentIniciatorUuid', UIniciator);
       localStorage.setItem('userFullName', Full_name);
+      localStorage.setItem('currentClientUuid', UClient);
       setIsLoggedIn(true);
       if (token) {
         fetchIncidents();
@@ -42,6 +44,7 @@ function App() {
       setIsLoading(false);
     }
   }
+  
 
 
   const onSignOut = () => {
@@ -71,7 +74,7 @@ function App() {
       navigate('/profile');
     }
   }, [isLoggedIn]);
-  
+
   useEffect(() => {
     if (isLoggedIn) {
       const interval = setInterval(() => {
@@ -130,3 +133,4 @@ function App() {
 }
 
 export default App;
+
