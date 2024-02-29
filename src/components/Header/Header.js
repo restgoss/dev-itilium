@@ -9,7 +9,6 @@ function Header({ isLoggedIn, onSignOut, setPopupOpened }) {
   const handleLogoutClick = () => {
     onSignOut();
   }
-
   const [currentName, setCurrentName] = useState(null);
 
   useEffect(() => {
@@ -17,7 +16,6 @@ function Header({ isLoggedIn, onSignOut, setPopupOpened }) {
       setCurrentName(localStorage.getItem('userFullName'));
     }
   }, [isLoggedIn])
-
 
   return (
     <header>

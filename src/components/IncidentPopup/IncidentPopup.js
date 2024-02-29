@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
-import cross from '../../utils/images/white_cross.png';
+import cross from '../../utils/images/close.svg';
 import ServiceSelection from './ServiceSelection';
 import api from '../../utils/Api';
 import TypeInStep from './TypeInStep';
 import Result from './Result.js';
 import { useNavigate } from 'react-router-dom';
+import ReworkTypeInStep from './ReworkTypeInStep';
 
 export default function IncidentPopup({ isPopupOpened, setPopupOpened, fetchIncidents }) {
     const popupRef = useRef(null);
@@ -75,6 +76,7 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened, fetchInci
                 Action: "RegisterIncident",
                 ClientUuid: `${clientUuid}`,
                 InitiatorUuid: `${iniciatorUuid}`,
+                PriorityUuid: "84073286-449c-11ed-9b01-0050569f5691",
                 Topic: `${topic}`,
                 Data: '12.12.2023 12:13:14',
                 Description: `${description}`,
@@ -93,7 +95,7 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened, fetchInci
             setLoading(false);
         }
     };
-    
+
 
     useEffect(() => {
         const fetchServiceComponentList = async () => {
@@ -141,7 +143,7 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened, fetchInci
                             className="incident-popup__body"
                             ref={popupRef}
                         >
-                            <button src={cross} onClick={() => handleClosePopup()} className="incident-popup__close-button"></button>
+                            <img src={cross} onClick={() => handleClosePopup()} className="incident-popup__close-button"></img>
                             {currentStep === 1 && (
                                 <>
                                     <p className="incident-popup__paragraph">С чем Вам нужна помощь?</p>
@@ -183,16 +185,29 @@ export default function IncidentPopup({ isPopupOpened, setPopupOpened, fetchInci
 
                             {currentStep === 2 && (
                                 <>
-                                    <TypeInStep
-                                        setDescription={setDescription}
-                                        description={description}
-                                        handlePrevStep={handlePrevStep}
-                                        selectedService={selectedService}
-                                        selectedComponent={selectedComponent}
-                                        handleSubmit={handleSubmit}
-                                        isLoading={isLoading}
-                                        setFilesArray={setFilesArray}
-                                    />
+                                    {selectedComponent.ServiceComponent === 'Доработка в 1С'
+                                        ?
+                                        <ReworkTypeInStep
+                                            selectedService={selectedService}
+                                            selectedComponent={selectedComponent}
+                                            handlePrevStep={handlePrevStep}
+                                            setDescription={setDescription}
+                                            description={description}
+                                            setCurrentStep={setCurrentStep}
+                                            setSuccess={setSuccess}
+                                        />
+                                        :
+                                        <TypeInStep
+                                            setDescription={setDescription}
+                                            description={description}
+                                            handlePrevStep={handlePrevStep}
+                                            selectedService={selectedService}
+                                            selectedComponent={selectedComponent}
+                                            handleSubmit={handleSubmit}
+                                            isLoading={isLoading}
+                                            setFilesArray={setFilesArray}
+                                        />
+                                    }
                                 </>
                             )}
 

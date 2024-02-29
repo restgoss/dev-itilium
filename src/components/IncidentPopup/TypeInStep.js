@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import red_cross from '../../utils/images/red_cross.png';
+import back from '../../utils/images/back.svg';
 export default function TypeInStep({
   selectedService,
   selectedComponent,
@@ -17,7 +17,7 @@ export default function TypeInStep({
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (!description.trim() || fileBase64List.length === 0) {
+    if (!description) {
       setIsEmpty(true);
       return;
     }
@@ -51,9 +51,7 @@ export default function TypeInStep({
 
   return (
     <>
-      <button className="incident-popup__button-back" onClick={handlePrevStep}>
-        &#8249;<span>Назад</span>
-      </button>
+      <img src={back} className="incident-popup__button-back" onClick={handlePrevStep}></img>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -75,38 +73,6 @@ export default function TypeInStep({
         transition={{ duration: 0.2 }}
         className="incident-popup__form">
         <form className="incident-popup__form" onSubmit={handleFormSubmit}>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            style={{ margin: '20px 0 0 0' }}
-            className="incident-popup__paragraph">Вложенные файлы:</motion.p>
-          {fileBase64List.length > 0 ? (
-            <div className='incident-popup__area'>
-              {fileBase64List.map((file, index) => (
-                <div key={index} className='incident-popup__pinned-file'>
-                  <span>{file.name}</span>
-                  <img onClick={() => setFileBase64List(prevList => prevList.filter((_, i) => i !== index))} className='incident-popup__area__cross' alt='' src={red_cross}></img>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                style={{ fontWeight: 'normal', margin: '15px 0 15px 0' }}
-                className="incident-popup__paragraph">Вы не прикрепили ни одного файла.</motion.p>
-            </>
-          )}
-          <div className='incident-popup__pinarea'>
-            <label className="messenger__add-file">
-              <input type='file' onChange={handleFileChange} multiple />
-            </label>
-          </div>
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

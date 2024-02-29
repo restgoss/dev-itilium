@@ -20,7 +20,7 @@ export const Services = [
         "Service": "1С",
         "ServiceUuid": "85e195dd-7e13-11ee-90a2-0050569f9f23",
         "ServiceCode": "0000000085",
-        "image": `${img_1c}`
+        "image": `${img_1c}`,
     },
     {
         "Service": "Программное обеспечение",

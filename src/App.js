@@ -22,15 +22,15 @@ function App() {
   const onSignIn = async ({ username, password }) => {
     try {
       setIsLoading(true);
-      const encodedPassword = encodeURIComponent(password);
-      const token = await api.LoginAD({ username, password: encodedPassword });
+      const token = await api.LoginAD({ username, password });
       localStorage.setItem('jwt', token.Token);
-      const { UTekP, UFiz, UIniciator, Full_name, UClient } = await api.Login(token.Token);
+      const { UTekP, UFiz, UIniciator, Full_name, UClient, Key_user } = await api.Login(token.Token);
       localStorage.setItem('currentUserUuid', UTekP);
       localStorage.setItem('currentPhysUuid', UFiz);
       localStorage.setItem('currentIniciatorUuid', UIniciator);
       localStorage.setItem('userFullName', Full_name);
       localStorage.setItem('currentClientUuid', UClient);
+      localStorage.setItem('isKeyUser', Key_user);
       setIsLoggedIn(true);
       if (token) {
         fetchIncidents();
@@ -44,14 +44,38 @@ function App() {
       setIsLoading(false);
     }
   }
-  
-
 
   const onSignOut = () => {
     setIsLoggedIn(false);
     localStorage.clear();
     navigate('/sign-in');
   };
+
+  const fetchUser = async () => {
+    try {
+      const token = localStorage.getItem('jwt');
+      if (token) {
+        const { UTekP, UFiz, UIniciator, Full_name, UClient, Key_user } = await api.Login(token);
+        localStorage.setItem('currentUserUuid', UTekP);
+        localStorage.setItem('currentPhysUuid', UFiz);
+        localStorage.setItem('currentIniciatorUuid', UIniciator);
+        localStorage.setItem('userFullName', Full_name);
+        localStorage.setItem('currentClientUuid', UClient);
+        localStorage.setItem('isKeyUser', Key_user);
+        setIsLoggedIn(true);
+      }
+    } catch (error) {
+      console.error(error.message);
+      localStorage.clear();
+    } finally {
+      setIsLoading(false);
+    }
+  }
+  
+
+  useEffect(() => {
+    fetchUser();
+  }, [])
 
 
   const fetchIncidents = async () => {
@@ -75,15 +99,6 @@ function App() {
     }
   }, [isLoggedIn]);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      const interval = setInterval(() => {
-        fetchIncidents();
-      }, 60000);
-
-      return () => clearInterval(interval);
-    }
-  }, [fetchIncidents]);
 
   useEffect(() => {
     const token = localStorage.getItem('jwt');

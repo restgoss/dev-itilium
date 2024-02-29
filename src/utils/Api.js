@@ -20,11 +20,15 @@ export class Api {
     }
 
     async LoginAD({ username, password }) {
-        const response = await fetch(`https://support.pridex.ru/auth?username=${username}&password=${password}`, {
-            method: 'GET',
+        const response = await fetch(`https://support.pridex.ru/auth`, {
+            method: 'POST',
             headers: {
                 "Content-Type": "application/json",
             },
+            body: JSON.stringify({
+                "username": `${username}`,
+                "password": `${password}`,
+            }),
         });
         if (response.status === 401) {
             return null;
@@ -88,6 +92,20 @@ export class Api {
         return this._handleResponse(response);
     }
 
+    async fetchOptions(token) {
+        const response = await fetch(`${this._baseUrl}/mobiledatag/GetMetriks`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Basic ${token}`,
+            },
+        });
+        if (response.status === 401) {
+            return null;
+        }
+        return this._handleResponse(response);
+    }
+
     async addNewIncident(token, body) {
         const response = await fetch(`${this._baseUrl}/externalapi/performCustomActionWithIncident`, {
             method: 'POST',
@@ -100,6 +118,17 @@ export class Api {
         return this._handleResponse(response);
     }
 
+    async addNewIncidentMobile(token, body) {
+        const response = await fetch(`${this._baseUrl}/mobiledatag/addNewIncedentM`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Basic ${token}`,
+            },
+            body: JSON.stringify(body)
+        });
+        return this._handleResponse(response);
+    }
 
     async addNewCommunication(token, incidentUuid, message) {
         const response = await fetch(`${this._baseUrl}/externalapi/performCustomActionWithIncident/`, {

@@ -26,7 +26,7 @@ export default function Messenger({ messageHistory, selectedIncidentUuid, fetchS
                 const res = api.addNewFile(token, selectedIncidentUuid, fileData, inputValue);
                 setTimeout(() => {
                     fetchSelectedIncident();
-                }, 200);
+                }, 600);
             } catch (error) {
                 console.log(error);
             } finally {
@@ -69,6 +69,17 @@ export default function Messenger({ messageHistory, selectedIncidentUuid, fetchS
             });
         }
     };
+
+    useEffect(() => {
+        if (inputValue === '') {
+            const interval = setInterval(() => {
+                fetchSelectedIncident();
+            }, 60000);
+    
+            return () => clearInterval(interval);
+        }
+    }, [inputValue, fetchSelectedIncident]);
+    
 
     return (
         <>
